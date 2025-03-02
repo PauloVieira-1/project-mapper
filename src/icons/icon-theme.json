@@ -1,0 +1,10 @@
+{
+  "iconDefinitions": {
+    "project-mapper-icon": {
+      "iconPath": "./icon.png"
+    }
+  },
+  "fileExtensions": {
+    "pm": "project-mapper-icon"
+  }
+}

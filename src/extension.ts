@@ -10,10 +10,12 @@ export function activate(context: vscode.ExtensionContext) {
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 
-	const disposable = vscode.commands.registerCommand('vs-window.helloWorld', () => {
+	const disposable = vscode.commands.registerCommand('projectmapper.launch', () => {
 
 		vscode.window.showInformationMessage('Hello World from VS-Window!');
-		vscode.window.showOpenDialog();
+		// vscode.window.showOpenDialog();
+		vscode.window.createWebviewPanel('.pm', 'Project-Mapper', vscode.ViewColumn.Two);
+		
 	});
 
 	context.subscriptions.push(disposable);

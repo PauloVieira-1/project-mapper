@@ -1,21 +1,38 @@
 {
-  "name": "vs-window",
-  "displayName": "VS-Window",
+  "name": "projectmapper",
+  "displayName": "Project-Mapper",
   "description": "N/A",
   "version": "0.0.1",
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.97.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "*"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vs-window.helloWorld",
-        "title": "Hello World"
+        "command": "projectmapper.launch",
+        "title": "Launch Project-Mapper"
+      }
+    ], 
+    "languages": [
+      {
+        "id": "project-mapper",
+        "extensions": [".pm"], 
+        "aliases": ["Project Mapper"]
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "project-mapper-theme",
+        "label": "Project Mapper Icons",
+        "path": ".icons/icon-theme.json"  
       }
     ]
   },
