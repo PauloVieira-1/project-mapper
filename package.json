@@ -24,7 +24,7 @@
     "languages": [
       {
         "id": "project-mapper",
-        "extensions": [".pm"], 
+        "extensions": ["pm"], 
         "aliases": ["Project Mapper"]
       }
     ],
@@ -32,9 +32,27 @@
       {
         "id": "project-mapper-theme",
         "label": "Project Mapper Icons",
-        "path": ".icons/icon-theme.json"  
+        "path": "./icons/icon-theme.json"  
       }
-    ]
+    ], 
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "project-mapper",
+          "title": "Project-Mapper",
+          "icon": "src/icons/activity-bar.png"
+        }
+      ]
+    },
+    "views": {
+  "project-mapper": [
+    {
+      "id": "View1",
+      "name": "Project View"
+    }
+  ]
+}
+
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
