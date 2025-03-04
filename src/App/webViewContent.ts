@@ -14,6 +14,7 @@ function getWebViewContent(cssUri: vscode.Uri, svgObject: any) {
     const arrowButton = new ArrowButton(svgObject.arrow, "outline", "Arrow");
     const arrowButtonHtml = arrowButton.createButton();
 
+    
     return `<!DOCTYPE html>
     <html lang="en">
     <head>
