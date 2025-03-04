@@ -3,8 +3,8 @@ abstract class Button {
 
     constructor(
         public iconPath: string,
-        public type: string,
-        public name: string 
+        public functionType: string ,
+        public name: string
     ) {}
 
     createButton() {}
@@ -14,21 +14,45 @@ class ShapeButton extends Button {
 
     constructor(
         public iconPath: string,
-        public type: string,
+        public functionType: string,
         public name: string 
     ) {
-        super(iconPath, type, name);
+        super(iconPath, functionType, name);
     }
 
     createButton(){
-        switch(this.type) {
+        switch(this.functionType) {
             case "fill":
-                return `<button id="button-${this.name}" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.name}" style="width: 70%; height: 70%;"></button>`;
+                return `
+                <a href="#">
+                <div class="grid grid-cols-6 items-center">
+                <img class="col-span-1 ps-0" src="${this.iconPath}" alt="${this.name}" style="width: 80%; height: 80%;">
+                <span class="col-span-4 pl-2 pr-0 font-semibold">${this.name}</span>
+
+                                </div>
+                    </a>
+                    `;
             case "outline":
-                return `<button id="button-${this.name}" class="mx-1" id="${this.name}">${this.name}</button>`;
+                return `<button id="button-add" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.name}" style="width: 70%; height: 70%;"></button>`;
             }
     }
 }
 
+class ArrowButton extends Button {
 
-export {ShapeButton};
+    constructor(
+        public iconPath: string,
+        public functionType: string,
+        public name: string 
+    ) {
+        super(iconPath, functionType, name);
+    }
+
+    createButton(){
+        return `<button id="button-arrow" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.name}" style="width: 70%; height: 70%;"></button>`;
+    }
+
+}
+
+
+export {ShapeButton, ArrowButton};

@@ -29,9 +29,21 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
 	const cssUri = webViewUri(panel, "src/media/global.css");
-  const svgUri = webViewUri(panel, "src/icons/plus.svg").toString();
-	  
-  panel.webview.html = getWebViewContent(cssUri, svgUri); // imported from App dir 
+  const plusUri = webViewUri(panel, "src/icons/plus.svg").toString();
+  const arrowUri = webViewUri(panel, "src/icons/arrow.svg").toString();
+  const squareUri = webViewUri(panel, "src/icons/square.svg").toString();
+  const triangleUri = webViewUri(panel, "src/icons/triangle.svg").toString();
+  const circleUri = webViewUri(panel, "src/icons/circle.svg").toString();
+
+  const svgObject = {
+    plus: plusUri,
+    arrow: arrowUri,
+    square: squareUri,
+    triangle: triangleUri,
+    circle: circleUri
+  };
+
+  panel.webview.html = getWebViewContent(cssUri, svgObject); // imported from App dir 
 
   });
 

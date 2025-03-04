@@ -1,9 +1,18 @@
 import * as vscode from "vscode";
-import { ShapeButton } from "./toolBar";
-function getWebViewContent(cssUri: vscode.Uri, svgUri: string) {
+import { ShapeButton, ArrowButton } from "./toolBar";
+function getWebViewContent(cssUri: vscode.Uri, svgObject: any) {
 
-    const addButton = new ShapeButton(svgUri, "fill", "add");
-    const buttonHtml = addButton.createButton();
+    const addSqaure = new ShapeButton(svgObject.square, "fill", "Add Square");
+    const squareHtml = addSqaure.createButton();
+
+    const addCircle = new ShapeButton(svgObject.circle, "fill", "Add Circle");
+    const circleHtml = addCircle.createButton();
+
+    const addTriangle = new ShapeButton(svgObject.triangle, "fill", "Add Triangle");
+    const triangleHtml = addTriangle.createButton();
+
+    const arrowButton = new ArrowButton(svgObject.arrow, "outline", "Arrow");
+    const arrowButtonHtml = arrowButton.createButton();
 
     return `<!DOCTYPE html>
     <html lang="en">
@@ -26,7 +35,15 @@ function getWebViewContent(cssUri: vscode.Uri, svgUri: string) {
         </div>
         <div class="grid-background h-screen mx-4 rounded-lg p-5 relative">
         <div id="button-menu" class="absolute top-0 right-0 mx-5 my-5 rounded-full px-1 py-2 flex items-center align-center"> 
-        ${buttonHtml}
+          <div class="dropdown">
+  <button id="dropbtn" class=" dropbtn mx-1 rounded-full flex items-center justify-center"><img src="${svgObject.plus}" alt="Add" style="width: 70%; height: 70%;"></button>
+  <div class="dropdown-content">
+    ${squareHtml}
+    ${circleHtml}
+    ${triangleHtml}
+  </div>
+</div>
+        ${arrowButtonHtml}
         </div>
         </div>
     </body>
