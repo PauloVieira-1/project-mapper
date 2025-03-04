@@ -1,13 +1,26 @@
+
 .grid-background {
     /* display: grid;
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: repeat(1, 1fr);
     grid-template-areas: "a" "b" "c" "d" "e" "f" "g" "h" "i" "j"; */
-    background-color: #e61f1f;
-    height: 100vh;
-    width: 100vw;
+    background-color: #323232;
+    height: 77vh;
+    width: 95vw;
+    background-image: url("./icons/Grid-PNG-Image-HD.png");
+    background-repeat: repeat;
+    background-position: center;
+    background-size: 200px 200px;
 }
 
-h1 {
-    color: rgb(0, 208, 255);
+#button-menu {
+    background-color: #4e4e4e;
+    height: 7vh;
+    width: 27vw;
+}
+
+#button-add {
+    background-color:#0098FF    ;
+    height: 100%;
+    width: 5vh;
 }

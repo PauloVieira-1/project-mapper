@@ -46,6 +46,10 @@ const extensionConfig = {
 						loader: "source-map-loader"
 					}
 				]
+			},
+			{
+				test: /\.svg$/,
+				loader: "svg-inline-loader"
 			}
 		]
 	},
