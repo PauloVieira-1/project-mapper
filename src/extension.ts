@@ -28,6 +28,16 @@ export function activate(context: vscode.ExtensionContext) {
       }
     );
 
+    panel.webview.onDidReceiveMessage((message) => {
+      switch (message.command) {
+        case "Add Square":
+          vscode.window.showInformationMessage(`Shape added: Square`);
+          panel.webview.postMessage({ name: "Square" });
+          break;
+      }
+    });
+
+
 	const cssUri = webViewUri(panel, "src/media/global.css");
   const plusUri = webViewUri(panel, "src/icons/plus.svg").toString();
   const arrowUri = webViewUri(panel, "src/icons/arrow.svg").toString();

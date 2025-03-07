@@ -1,18 +1,17 @@
 import * as vscode from "vscode";
-import { ShapeButton, ArrowButton } from "./toolBar";
+import { ShapeButton, ArrowButton, CreateShapeButton, CreateArrowButton } from "./toolBar";
+import { create } from "domain";
 function getWebViewContent(cssUri: vscode.Uri, svgObject: any) {
 
-    const addSqaure = new ShapeButton(svgObject.square, "fill", "Add Square");
-    const squareHtml = addSqaure.createButton();
+    const squareButton = new CreateShapeButton(svgObject.square, "fill", "Add Square").createButton();
+    const circleButton = new CreateShapeButton(svgObject.circle, "fill", "Add Circle").createButton();
+    const triangleButton = new CreateShapeButton(svgObject.triangle, "fill", "Add Triangle").createButton();
+    const arrowButton = new CreateArrowButton(svgObject.arrow, "outline", "Arrow").createButton();
 
-    const addCircle = new ShapeButton(svgObject.circle, "fill", "Add Circle");
-    const circleHtml = addCircle.createButton();
-
-    const addTriangle = new ShapeButton(svgObject.triangle, "fill", "Add Triangle");
-    const triangleHtml = addTriangle.createButton();
-
-    const arrowButton = new ArrowButton(svgObject.arrow, "outline", "Arrow");
-    const arrowButtonHtml = arrowButton.createButton();
+    const squareHtml = squareButton.render();
+    const circleHtml = circleButton.render();
+    const triangleHtml = triangleButton.render();
+    const arrowHtml = arrowButton.render();
 
     
     return `<!DOCTYPE html>
@@ -24,7 +23,18 @@ function getWebViewContent(cssUri: vscode.Uri, svgObject: any) {
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
         <link rel="stylesheet" type="text/css" href="${cssUri}">
     </head>
+    <script>
+      const vscode = acquireVsCodeApi();
 
+      window.addEventListener('message', event => {
+        const message = event.data; 
+        switch(message.name) {
+          case 'Square':
+            break;
+        }
+      })
+
+    </script>
     <body>
         <div class="container mx-4 my-10">
             <h1 class="text-3xl font-bold my-5">Project-Mapper</h1>
@@ -44,7 +54,7 @@ function getWebViewContent(cssUri: vscode.Uri, svgObject: any) {
     ${triangleHtml}
   </div>
 </div>
-        ${arrowButtonHtml}
+          ${arrowHtml}
         </div>
         </div>
     </body>

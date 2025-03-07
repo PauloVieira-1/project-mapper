@@ -6,8 +6,10 @@ abstract class Shape {
         public width: string 
     ) {}
 
-    createShape()
-    {}
+    render()
+    {
+
+    }
 }
 
 class Square extends Shape {
@@ -17,8 +19,15 @@ class Square extends Shape {
     ) {
         super(length, width);
     }
-    createShape() {
-        console.log("TEST");
+    render() {
+        return `
+        
+        <div class="grid grid-cols-2 items-center">
+        <span class="col-span-1 pl-2 pr-0 font-semibold">Length: ${this.length}</span>
+        <span class="col-span-1 pl-2 pr-0 font-semibold">${this.width}</span>
+        </div>
+        
+        `;
     }
 }
 
