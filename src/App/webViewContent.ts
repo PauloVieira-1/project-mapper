@@ -1,17 +1,12 @@
 import * as vscode from "vscode";
 import { CreateShapeButton, CreateArrowButton } from "./toolBar";
 
-function getWebViewContent(cssUri: vscode.Uri, svgObject: any, webviewLogic: vscode.Uri) {
+function getWebViewContent(cssUri: vscode.Uri, svgObject: any, buttons: any) {
 
-    const squareButton = new CreateShapeButton(svgObject.square, "fill", "Add Square").createButton();
-    const circleButton = new CreateShapeButton(svgObject.circle, "fill", "Add Circle").createButton();
-    const triangleButton = new CreateShapeButton(svgObject.triangle, "fill", "Add Triangle").createButton();
-    const arrowButton = new CreateArrowButton(svgObject.arrow, "outline", "Arrow").createButton();
-
-    const squareHtml = squareButton.render();
-    const circleHtml = circleButton.render();
-    const triangleHtml = triangleButton.render();
-    const arrowHtml = arrowButton.render();
+    const squareHtml = buttons.squareButton ? buttons.squareButton.render() : '';
+    const circleHtml = buttons.circleButton ? buttons.circleButton.render() : '';
+    const triangleHtml = buttons.triangleButton ? buttons.triangleButton.render() : '';
+    const arrowHtml = buttons.arrowButton ? buttons.arrowButton.render() : '';
     
     return `<!DOCTYPE html>
     <html lang="en">
@@ -22,27 +17,18 @@ function getWebViewContent(cssUri: vscode.Uri, svgObject: any, webviewLogic: vsc
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
         <link rel="stylesheet" type="text/css" href="${cssUri}">
     </head>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script type="module" src="${webviewLogic}"></script>
     <script>
 
       const vscode = acquireVsCodeApi();
 
-      window.addEventListener('message', (event) => {
+        document.getElementById("buttonSquare").addEventListener("click", () => {
+          vscode.postMessage({ command: "click", text: "TEST BUTTON SQUARE" });
+        });
 
-        const message = event.data; 
-        let element = '';
-
-        switch(message.name) {
-          case 'Square':
-          element = \`${squareHtml}\`;
-            break;
-        }
-
-      if (element) {
-        document.getElementById("container").insertAdjacentHTML("beforeend", element); 
-      }
-      })
+        document.getElementById("buttonCircle").addEventListener("click", () => {
+          vscode.postMessage({ command: "click", text: "TEST BUTTON CIRCLE" });
+        });
+)
 
     </script>
     <body>

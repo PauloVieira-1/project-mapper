@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import getWebViewContent from "./App/webViewContent";
+import Application from "./App/webView";
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -30,16 +31,20 @@ export function activate(context: vscode.ExtensionContext) {
 
     panel.webview.onDidReceiveMessage((message) => {
       switch (message.command) {
-        case "Add Square":
-          vscode.window.showInformationMessage(`Shape added: Square`);
-          panel.webview.postMessage({ name: "Square" });
+        case "Add":
+          vscode.window.showInformationMessage(`Shape added: ${message.text}`);
+          panel.webview.postMessage({ command: message.text });
+
+        case "click":
+          vscode.window.showInformationMessage(`Button Clicked: ${message.text}`);
           break;
       }
     });
 
+  
+  // Front end interaction with back end
 
 	const cssUri = webViewUri(panel, "src/media/global.css");
-  const webviewLogic = webViewUri(panel, "src/App/webView.js");
   const plusUri = webViewUri(panel, "src/icons/plus.svg").toString();
   const arrowUri = webViewUri(panel, "src/icons/arrow.svg").toString();
   const squareUri = webViewUri(panel, "src/icons/square.svg").toString();
@@ -54,7 +59,8 @@ export function activate(context: vscode.ExtensionContext) {
     circle: circleUri
   };
 
-  panel.webview.html = getWebViewContent(cssUri, svgObject, webviewLogic);
+  const app = new Application(svgObject, panel);
+  panel.webview.html = app.webViewContent(cssUri);
 
   });
 

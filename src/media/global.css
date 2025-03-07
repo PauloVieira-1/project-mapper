@@ -19,7 +19,7 @@
     width: 27vw;
 }
 
-#button-add {
+.button-add {
     background-color:#0098FF    ;
     height: 5vh;
     width: 5vh;
