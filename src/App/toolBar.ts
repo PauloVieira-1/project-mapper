@@ -1,4 +1,4 @@
-import { Square } from "./shape";
+import { Shape, Square } from "./shape";
 
 
 abstract class ButtonFactory {
@@ -32,8 +32,8 @@ abstract class Button {
     ) {
     }
 
-    abstract render(): void 
-    abstract addShape(): void 
+    abstract render(): string 
+    abstract addShape(): string 
 }
 
 class ShapeButton extends Button {
@@ -60,7 +60,10 @@ class ShapeButton extends Button {
                  </a>`;
             case "outline":
                 return `<button id="button-add" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.name}" style="width: 70%; height: 70%;"></button>`;
+            default:
+                return `<button id="button-add" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.name}" style="width: 70%; height: 70%;"></button>`;
             }
+        
     }
 
     addShape() {
@@ -83,8 +86,8 @@ class ArrowButton extends Button {
         return `<button id="button-arrow" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.name}" style="width: 70%; height: 70%;"></button>`;
     }
 
-    addShape(): void {
-        
+    addShape() {
+        return new Square("100px", "100px").render();
     }
 
 }

@@ -1,4 +1,3 @@
-import { ShapeButton } from "./toolBar";
 
 abstract class Shape {
     constructor(
@@ -6,10 +5,7 @@ abstract class Shape {
         public width: string 
     ) {}
 
-    render()
-    {
-
-    }
+    abstract render() : string
 }
 
 class Square extends Shape {
@@ -31,4 +27,4 @@ class Square extends Shape {
     }
 }
 
-export { Shape, Square }
+export { Shape, Square };

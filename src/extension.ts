@@ -39,6 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 	const cssUri = webViewUri(panel, "src/media/global.css");
+  const webviewLogic = webViewUri(panel, "src/App/webView.js")
   const plusUri = webViewUri(panel, "src/icons/plus.svg").toString();
   const arrowUri = webViewUri(panel, "src/icons/arrow.svg").toString();
   const squareUri = webViewUri(panel, "src/icons/square.svg").toString();
@@ -53,10 +54,9 @@ export function activate(context: vscode.ExtensionContext) {
     circle: circleUri
   };
 
-  panel.webview.html = getWebViewContent(cssUri, svgObject); // imported from App dir 
+  panel.webview.html = getWebViewContent(cssUri, svgObject, webviewLogic);
 
   });
-
 
   context.subscriptions.push(open);
 

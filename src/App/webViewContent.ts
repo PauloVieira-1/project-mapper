@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import { ShapeButton, ArrowButton, CreateShapeButton, CreateArrowButton } from "./toolBar";
-import { create } from "domain";
-function getWebViewContent(cssUri: vscode.Uri, svgObject: any) {
+import { CreateShapeButton, CreateArrowButton } from "./toolBar";
+
+function getWebViewContent(cssUri: vscode.Uri, svgObject: any, webviewLogic: vscode.Uri) {
 
     const squareButton = new CreateShapeButton(svgObject.square, "fill", "Add Square").createButton();
     const circleButton = new CreateShapeButton(svgObject.circle, "fill", "Add Circle").createButton();
@@ -12,7 +12,6 @@ function getWebViewContent(cssUri: vscode.Uri, svgObject: any) {
     const circleHtml = circleButton.render();
     const triangleHtml = triangleButton.render();
     const arrowHtml = arrowButton.render();
-
     
     return `<!DOCTYPE html>
     <html lang="en">
@@ -23,15 +22,26 @@ function getWebViewContent(cssUri: vscode.Uri, svgObject: any) {
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
         <link rel="stylesheet" type="text/css" href="${cssUri}">
     </head>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="module" src="${webviewLogic}"></script>
     <script>
+
       const vscode = acquireVsCodeApi();
 
-      window.addEventListener('message', event => {
+      window.addEventListener('message', (event) => {
+
         const message = event.data; 
+        let element = '';
+
         switch(message.name) {
           case 'Square':
+          element = \`${squareHtml}\`;
             break;
         }
+
+      if (element) {
+        document.getElementById("container").insertAdjacentHTML("beforeend", element); 
+      }
       })
 
     </script>
@@ -57,6 +67,9 @@ function getWebViewContent(cssUri: vscode.Uri, svgObject: any) {
           ${arrowHtml}
         </div>
         </div>
+    <div>
+  <div id = "container">
+  </div>
     </body>
     </html>`;
   }
