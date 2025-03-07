@@ -1,4 +1,4 @@
-import { Shape, Square } from "./shape";
+import { Square } from "./shape";
 
 
 abstract class ButtonFactory {
@@ -92,4 +92,4 @@ class ArrowButton extends Button {
 
 }
 
-export {ShapeButton, ArrowButton, CreateShapeButton, CreateArrowButton};
+export {ShapeButton, ArrowButton, CreateShapeButton, CreateArrowButton, Button};

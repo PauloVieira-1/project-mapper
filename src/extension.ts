@@ -39,14 +39,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 	const cssUri = webViewUri(panel, "src/media/global.css");
-  const webviewLogic = webViewUri(panel, "src/App/webView.js")
+  const webviewLogic = webViewUri(panel, "src/App/webView.js");
   const plusUri = webViewUri(panel, "src/icons/plus.svg").toString();
   const arrowUri = webViewUri(panel, "src/icons/arrow.svg").toString();
   const squareUri = webViewUri(panel, "src/icons/square.svg").toString();
   const triangleUri = webViewUri(panel, "src/icons/triangle.svg").toString();
   const circleUri = webViewUri(panel, "src/icons/circle.svg").toString();
 
-  const svgObject = {
+  const svgObject: any = {
     plus: plusUri,
     arrow: arrowUri,
     square: squareUri,
