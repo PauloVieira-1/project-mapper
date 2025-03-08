@@ -70,6 +70,7 @@ class Application {
         return this.arrowButton?.addShape();
       default:
         console.error(`Unknown button: ${buttonName}`);
+        return null;
     }
   }
 

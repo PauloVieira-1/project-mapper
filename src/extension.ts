@@ -14,7 +14,6 @@ export function activate(context: vscode.ExtensionContext) {
   const webViewUri = (panel: vscode.WebviewPanel, relativePath: string) => {
     return panel.webview.asWebviewUri(vscode.Uri.file(path.join(context.extensionPath, relativePath)));
   };
-  
 
   const open = vscode.commands.registerCommand("projectmapper.launch", () => {
     
@@ -31,20 +30,11 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     const cssUri = webViewUri(panel, "src/media/global.css");
-    const plusUri = webViewUri(panel, "src/icons/plus.svg").toString();
-    const arrowUri = webViewUri(panel, "src/icons/arrow.svg").toString();
-    const squareUri = webViewUri(panel, "src/icons/square.svg").toString();
-    const triangleUri = webViewUri(panel, "src/icons/triangle.svg").toString();
-    const circleUri = webViewUri(panel, "src/icons/circle.svg").toString();
-  
-    const svgResources: any = {
-      plus: plusUri,
-      arrow: arrowUri,
-      square: squareUri,
-      triangle: triangleUri,
-      circle: circleUri
-    };
-  
+    const svgResources = ["plus", "arrow", "square", "triangle", "circle"].reduce((list, item) => {
+      list[item] = webViewUri(panel, `src/icons/${item}.svg`).toString();
+      return list;
+    }, {} as {[key: string]: string});
+    
     const app = new Application(svgResources, panel);
     const shapes : Shape[] = context.workspaceState.get("shapes") || [];
     
