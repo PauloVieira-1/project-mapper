@@ -1,4 +1,4 @@
-import { Shape, Square } from "./shape";
+import { Shape, Square, Triangle, Circle } from "./shape";
 
 abstract class ButtonFactory {
   constructor(
@@ -42,7 +42,7 @@ abstract class Button {
   ) {}
 
   abstract render(): string;
-  abstract addShape(): Shape;
+  abstract addShape(type: string): Shape;
 }
 
 class ShapeButton extends Button {
@@ -75,8 +75,15 @@ class ShapeButton extends Button {
     }
   }
 
-  addShape() {
-    return new Square("100px", "100px");
+  addShape(type: string) : Shape {
+    switch (type) {
+      case "Circle":
+        return new Circle("100px", "100px");
+      case "Triangle":
+        return new Triangle("100px", "100px");
+      default:
+        return new Square("100px", "100px");
+    }
   }
 }
 
@@ -91,10 +98,13 @@ class ArrowButton extends Button {
   }
 
   render() {
-    return `<button id="button-arrow" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.command}" style="width: 70%; height: 70%;"></button>`;
+    return `<button onclick="vscode.postMessage({
+                        command: 'Clear',
+                    })" 
+                    id="button-arrow" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.command}" style="width: 70%; height: 70%;"></button>`;
   }
 
-  addShape() {
+  addShape() : Shape {
     return new Square("100px", "100px");
   }
 }

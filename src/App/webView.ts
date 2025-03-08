@@ -58,19 +58,17 @@ class Application {
       throw new Error("Buttons not created");
     }
   }
-  createShape(buttonName: string) {
+  createShape(buttonName: string) : Shape {
     switch (buttonName) {
-      case "Square":
-        return this.squareButton?.addShape();
       case "Circle":
-        return this.circleButton?.addShape();
+        return this.circleButton!.addShape("Circle");
       case "Triangle":
-        return this.triangleButton?.addShape();
+        return this.triangleButton!.addShape("Triangle");
       case "Arrow":
-        return this.arrowButton?.addShape();
+        return this.arrowButton!.addShape("arrow1");
       default:
         console.error(`Unknown button: ${buttonName}`);
-        return null;
+        return this.squareButton!.addShape("Square");
     }
   }
 

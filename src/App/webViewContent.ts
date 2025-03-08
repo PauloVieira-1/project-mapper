@@ -3,8 +3,12 @@ import { Shape } from "./shape";
 
 const html = String.raw;
 
-function getWebViewContent(cssUri: vscode.Uri, svgObject: any, shapes : Shape[], buttons: any) {
-  
+function getWebViewContent(
+  cssUri: vscode.Uri,
+  svgObject: any,
+  shapes: Shape[],
+  buttons: any,
+) {
   const squareHtml = buttons.squareButton ? buttons.squareButton.render() : "";
   const circleHtml = buttons.circleButton ? buttons.circleButton.render() : "";
   const triangleHtml = buttons.triangleButton
@@ -12,11 +16,10 @@ function getWebViewContent(cssUri: vscode.Uri, svgObject: any, shapes : Shape[],
     : "";
   const arrowHtml = buttons.arrowButton ? buttons.arrowButton.render() : "";
 
-  const shapesHtml = Object.values(shapes)
+  const shapesHtml = shapes
     .map((shape: Shape) => {
-      console.log(shape);
-      // return shape.render();
-      
+      console.log(typeof shape);
+      return `<div>${shape.render()}</div>`;
     })
     .join("");
 
