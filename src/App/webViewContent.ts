@@ -1,14 +1,24 @@
 import * as vscode from "vscode";
+import { Shape } from "./shape";
 
 const html = String.raw;
 
-function getWebViewContent(cssUri: vscode.Uri, svgObject: any, buttons: any) {
+function getWebViewContent(cssUri: vscode.Uri, svgObject: any, shapes : Shape[], buttons: any) {
+  
   const squareHtml = buttons.squareButton ? buttons.squareButton.render() : "";
   const circleHtml = buttons.circleButton ? buttons.circleButton.render() : "";
   const triangleHtml = buttons.triangleButton
     ? buttons.triangleButton.render()
     : "";
   const arrowHtml = buttons.arrowButton ? buttons.arrowButton.render() : "";
+
+  const shapesHtml = Object.values(shapes)
+    .map((shape: Shape) => {
+      console.log(shape);
+      // return shape.render();
+      
+    })
+    .join("");
 
   return html`<!DOCTYPE html>
     <html lang="en">
@@ -46,6 +56,7 @@ function getWebViewContent(cssUri: vscode.Uri, svgObject: any, buttons: any) {
         </div>
     <div>
   <div id = "container">
+    ${shapesHtml}
   </div>
     </body>
     </html>`;

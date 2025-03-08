@@ -1,4 +1,4 @@
-import { Square } from "./shape";
+import { Shape, Square } from "./shape";
 
 abstract class ButtonFactory {
   constructor(
@@ -42,7 +42,7 @@ abstract class Button {
   ) {}
 
   abstract render(): string;
-  abstract addShape(): string;
+  abstract addShape(): Shape;
 }
 
 class ShapeButton extends Button {
@@ -65,7 +65,7 @@ class ShapeButton extends Button {
                     })">
                 <div class="grid grid-cols-6 items-center">
                 <img class="col-span-1 ps-0" src="${this.iconPath}" alt="${this.command}" style="width: 80%; height: 80%;">
-                <span class="col-span-4 pl-2 pr-0 font-semibold">${this.command}</span>
+                <span class="col-span-4 pl-2 pr-0 font-semibold">${this.command} ${this.text}</span>
                 </div>
                  </a>`;
       case "outline":
@@ -76,8 +76,7 @@ class ShapeButton extends Button {
   }
 
   addShape() {
-    console.log("TEST");
-    return new Square("100px", "100px").render();
+    return new Square("100px", "100px");
   }
 }
 
@@ -96,7 +95,7 @@ class ArrowButton extends Button {
   }
 
   addShape() {
-    return new Square("100px", "100px").render();
+    return new Square("100px", "100px");
   }
 }
 

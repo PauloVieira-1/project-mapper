@@ -1,5 +1,6 @@
 import { CreateShapeButton, CreateArrowButton, Button } from "./toolBar";
 import getWebViewContent from "./webViewContent";
+import { Shape } from "./shape";
 import * as vscode from "vscode";
 
 class Application {
@@ -39,7 +40,7 @@ class Application {
       this.svgObject.triangle,
       "fill",
       "Add",
-      "triangle",
+      "Triangle",
     ).createButton();
     this.arrowButton = new CreateArrowButton(
       this.svgObject.arrow,
@@ -72,8 +73,8 @@ class Application {
     }
   }
 
-  webViewContent(cssUri: vscode.Uri) {
-    const html = getWebViewContent(cssUri, this.svgObject, {
+  webViewContent(cssUri: vscode.Uri, shapes: Shape[]) {
+    const html = getWebViewContent(cssUri, this.svgObject, shapes, {
       squareButton: this.squareButton,
       circleButton: this.circleButton,
       triangleButton: this.triangleButton,

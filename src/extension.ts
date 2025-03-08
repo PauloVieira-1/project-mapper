@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import getWebViewContent from "./App/webViewContent";
+import { Shape } from "./App/shape";
 import Application from "./App/webView";
 
 
@@ -46,8 +46,8 @@ export function activate(context: vscode.ExtensionContext) {
     };
   
     const app = new Application(svgResources, panel);
-    const shapes : string[] = [];
-
+    const shapes : Shape[] = context.workspaceState.get("shapes") || [];
+    
     panel.webview.onDidReceiveMessage((message) => {
       switch (message.command) {
         case "Add":
@@ -55,18 +55,17 @@ export function activate(context: vscode.ExtensionContext) {
           const shape = app.createShape(message.text);
           if (shape) {
             shapes.push(shape);
+            context.workspaceState.update("shapes", shapes);
           }
-          console.log(shapes);
           break;
       }
     });
+    panel.webview.html = app.webViewContent(cssUri, shapes);
 
     const disposable = panel.onDidDispose(() => {
       disposable.dispose();
     });
-
-  panel.webview.html = app.webViewContent(cssUri);
-
+    
   });
 
   context.subscriptions.push(open);
