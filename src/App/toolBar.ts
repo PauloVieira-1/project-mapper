@@ -71,6 +71,7 @@ class ShapeButton extends Button {
     }
 
     addShape() {
+        console.log("TEST");
         return new Square("100px", "100px").render();
     }
 

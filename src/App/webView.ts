@@ -1,12 +1,6 @@
 import { CreateShapeButton, CreateArrowButton, Button } from "./toolBar";
-import { Square } from "./shape";
 import getWebViewContent from "./webViewContent";
 import * as vscode from "vscode";
-
-declare function acquireVsCodeApi(): any;
-declare var window: any;
-declare var document: any;
-
 
 class Application {
 
@@ -48,15 +42,29 @@ class Application {
   // }
 
   setUpButtons(){
-    this.squareButton = new CreateShapeButton(this.svgObject.square, "fill","Sqaure", "Add").createButton();
-    this.circleButton = new CreateShapeButton(this.svgObject.circle, "fill", "Circle", "Add").createButton();
-    this.triangleButton = new CreateShapeButton(this.svgObject.triangle, "fill", "Triangle", "Add").createButton();
-    this.arrowButton = new CreateArrowButton(this.svgObject.arrow, "fill", "Arrow", "Add").createButton();
+    this.squareButton = new CreateShapeButton(this.svgObject.square, "fill","Add", "Square").createButton();
+    this.circleButton = new CreateShapeButton(this.svgObject.circle, "fill", "Add", "Circle").createButton();
+    this.triangleButton = new CreateShapeButton(this.svgObject.triangle, "fill", "Add", "triangle").createButton();
+    this.arrowButton = new CreateArrowButton(this.svgObject.arrow, "fill", "Add", "Arrow").createButton();
 
     if (!this.squareButton || !this.circleButton || !this.triangleButton || !this.arrowButton) {
       throw new Error("Buttons not created");
     }
 
+  }
+  createShape(buttonName: string) {
+    switch (buttonName) {
+      case "Square":
+        return this.squareButton?.addShape();
+      case "Circle":
+        return this.circleButton?.addShape();
+      case "Triangle":
+        return this.triangleButton?.addShape();
+      case "Arrow":
+        return this.arrowButton?.addShape();
+      default:
+        console.error(`Unknown button: ${buttonName}`);
+    }
   }
 
   webViewContent(cssUri: vscode.Uri) {

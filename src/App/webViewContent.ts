@@ -18,18 +18,7 @@ function getWebViewContent(cssUri: vscode.Uri, svgObject: any, buttons: any) {
         <link rel="stylesheet" type="text/css" href="${cssUri}">
     </head>
     <script>
-
-      const vscode = acquireVsCodeApi();
-
-        document.getElementById("buttonSquare").addEventListener("click", () => {
-          vscode.postMessage({ command: "click", text: "TEST BUTTON SQUARE" });
-        });
-
-        document.getElementById("buttonCircle").addEventListener("click", () => {
-          vscode.postMessage({ command: "click", text: "TEST BUTTON CIRCLE" });
-        });
-)
-
+        const vscode = acquireVsCodeApi();
     </script>
     <body>
         <div class="container mx-4 my-10">
