@@ -1,14 +1,16 @@
 import * as vscode from "vscode";
-import { CreateShapeButton, CreateArrowButton } from "./toolBar";
+
+const html = String.raw;
 
 function getWebViewContent(cssUri: vscode.Uri, svgObject: any, buttons: any) {
+  const squareHtml = buttons.squareButton ? buttons.squareButton.render() : "";
+  const circleHtml = buttons.circleButton ? buttons.circleButton.render() : "";
+  const triangleHtml = buttons.triangleButton
+    ? buttons.triangleButton.render()
+    : "";
+  const arrowHtml = buttons.arrowButton ? buttons.arrowButton.render() : "";
 
-    const squareHtml = buttons.squareButton ? buttons.squareButton.render() : '';
-    const circleHtml = buttons.circleButton ? buttons.circleButton.render() : '';
-    const triangleHtml = buttons.triangleButton ? buttons.triangleButton.render() : '';
-    const arrowHtml = buttons.arrowButton ? buttons.arrowButton.render() : '';
-    
-    return `<!DOCTYPE html>
+  return html`<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -47,6 +49,6 @@ function getWebViewContent(cssUri: vscode.Uri, svgObject: any, buttons: any) {
   </div>
     </body>
     </html>`;
-  }
+}
 
-  export default getWebViewContent;
+export default getWebViewContent;
