@@ -3,18 +3,21 @@ import * as path from "path";
 import getWebViewContent from "./App/webViewContent";
 import Application from "./App/webView";
 
+
 export function activate(context: vscode.ExtensionContext) {
+
   const resourceUri = (relativePath: string) => {
-    return vscode.Uri.file(path.join(context.extensionPath, relativePath));
+    return vscode.Uri.file(path.join(context.extensionPath,relativePath));
+  
   };
 
   const webViewUri = (panel: vscode.WebviewPanel, relativePath: string) => {
-    return panel.webview.asWebviewUri(
-      vscode.Uri.file(path.join(context.extensionPath, relativePath)),
-    );
+    return panel.webview.asWebviewUri(vscode.Uri.file(path.join(context.extensionPath, relativePath)));
   };
+  
 
   const open = vscode.commands.registerCommand("projectmapper.launch", () => {
+    
     const panel = vscode.window.createWebviewPanel(
       "projectMapper",
       "Project-Mapper",
@@ -22,12 +25,9 @@ export function activate(context: vscode.ExtensionContext) {
       {
         enableScripts: true,
         retainContextWhenHidden: true,
-        localResourceRoots: [
-          resourceUri("src/media"),
-          resourceUri("src/icons"),
-          resourceUri("src/App"),
-        ],
-      },
+        localResourceRoots: [resourceUri("src/media"), resourceUri("src/icons"), resourceUri("src/App")
+        ]
+      }
     );
 
     const cssUri = webViewUri(panel, "src/media/global.css");
@@ -36,17 +36,17 @@ export function activate(context: vscode.ExtensionContext) {
     const squareUri = webViewUri(panel, "src/icons/square.svg").toString();
     const triangleUri = webViewUri(panel, "src/icons/triangle.svg").toString();
     const circleUri = webViewUri(panel, "src/icons/circle.svg").toString();
-
+  
     const svgResources: any = {
       plus: plusUri,
       arrow: arrowUri,
       square: squareUri,
       triangle: triangleUri,
-      circle: circleUri,
+      circle: circleUri
     };
-
+  
     const app = new Application(svgResources, panel);
-    const shapes: string[] = [];
+    const shapes : string[] = [];
 
     panel.webview.onDidReceiveMessage((message) => {
       switch (message.command) {
@@ -65,10 +65,13 @@ export function activate(context: vscode.ExtensionContext) {
       disposable.dispose();
     });
 
-    panel.webview.html = app.webViewContent(cssUri);
+  panel.webview.html = app.webViewContent(cssUri);
+
   });
 
   context.subscriptions.push(open);
+
 }
+
 
 export function deactivate() {}
