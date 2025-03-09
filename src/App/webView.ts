@@ -67,7 +67,6 @@ class Application {
       case "Arrow":
         return this.arrowButton!.addShape("arrow1");
       default:
-        console.error(`Unknown button: ${buttonName}`);
         return this.squareButton!.addShape("Square");
     }
   }

@@ -83,3 +83,41 @@
 .dropdown:hover .dropbtn {
   background-color: #0065a9;
 }
+
+
+svg rect, svg circle, svg line, svg polygon{
+  fill: #0098ff;
+}
+
+svg:hover .close{
+  display: block;
+  fill: #ff0000;
+}
+
+svg rect:hover, svg circle:hover, svg line:hover, svg polygon:hover{
+  fill: #0065a9;
+}
+
+.hidden-svg {
+  display: none;
+  position: absolute;
+  top: 100%; 
+  left: 50%;
+  transform: translateX(-50%);
+  fill: #de4e4e !important;
+
+}
+
+.hidden-svg:hover {
+  fill: #a53a3a !important;
+}
+
+.hover-target {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.hover-target:hover .hidden-svg {
+  display: block;
+}

@@ -78,11 +78,11 @@ class ShapeButton extends Button {
   addShape(type: string) : Shape {
     switch (type) {
       case "Circle":
-        return new Circle("100px", "100px");
+        return new Circle(100, 100);
       case "Triangle":
-        return new Triangle("100px", "100px");
+        return new Triangle(100, 100);
       default:
-        return new Square("100px", "100px");
+        return new Square(100, 100);
     }
   }
 }
@@ -105,9 +105,11 @@ class ArrowButton extends Button {
   }
 
   addShape() : Shape {
-    return new Square("100px", "100px");
-  }
+    return new Square(100, 100);
 }
+
+}
+
 
 export {
   ShapeButton,

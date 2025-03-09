@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Shape, Square } from "./App/shape";
+import { Shape } from "./App/shape";
 import Application from "./App/webView";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -13,6 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.Uri.file(path.join(context.extensionPath, relativePath)),
     );
   };
+
 
   const open = vscode.commands.registerCommand("projectmapper.launch", () => {
     const panel = vscode.window.createWebviewPanel(
@@ -64,11 +65,17 @@ export function activate(context: vscode.ExtensionContext) {
       }
     });
 
-    const objectArray: Shape[] = shapes.map((element : string) => {
-      return app.createShape(element);
-    });
+    const updateWebView = (objectArray: Shape[]) => {
+      panel.webview.html = app.webViewContent(cssUri, objectArray);
+    };
 
-    panel.webview.html = app.webViewContent(cssUri, objectArray);
+
+    setInterval(() =>{ 
+      const objectArray: Shape[] = shapes.map((element : string) => {
+        return app.createShape(element);
+      });
+
+      updateWebView(objectArray); }, 800);
 
     const disposable = panel.onDidDispose(() => {
       disposable.dispose();
