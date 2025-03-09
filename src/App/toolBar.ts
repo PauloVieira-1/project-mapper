@@ -75,7 +75,7 @@ class ShapeButton extends Button {
     }
   }
 
-  addShape(type: string) : Shape {
+  addShape(type: string): Shape {
     switch (type) {
       case "Circle":
         return new Circle(100, 100);
@@ -104,12 +104,10 @@ class ArrowButton extends Button {
                     id="button-arrow" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.command}" style="width: 70%; height: 70%;"></button>`;
   }
 
-  addShape() : Shape {
+  addShape(): Shape {
     return new Square(100, 100);
+  }
 }
-
-}
-
 
 export {
   ShapeButton,

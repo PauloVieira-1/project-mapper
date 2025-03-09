@@ -58,7 +58,7 @@ class Application {
       throw new Error("Buttons not created");
     }
   }
-  createShape(buttonName: string) : Shape {
+  createShape(buttonName: string): Shape {
     switch (buttonName) {
       case "Circle":
         return this.circleButton!.addShape("Circle");

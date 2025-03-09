@@ -14,7 +14,6 @@ export function activate(context: vscode.ExtensionContext) {
     );
   };
 
-
   const open = vscode.commands.registerCommand("projectmapper.launch", () => {
     const panel = vscode.window.createWebviewPanel(
       "projectMapper",
@@ -69,13 +68,13 @@ export function activate(context: vscode.ExtensionContext) {
       panel.webview.html = app.webViewContent(cssUri, objectArray);
     };
 
-
-    setInterval(() =>{ 
-      const objectArray: Shape[] = shapes.map((element : string) => {
+    setInterval(() => {
+      const objectArray: Shape[] = shapes.map((element: string) => {
         return app.createShape(element);
       });
 
-      updateWebView(objectArray); }, 800);
+      updateWebView(objectArray);
+    }, 800);
 
     const disposable = panel.onDidDispose(() => {
       disposable.dispose();

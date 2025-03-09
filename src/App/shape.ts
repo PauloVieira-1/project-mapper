@@ -38,7 +38,6 @@ class Triangle extends Shape {
     super(length, width);
   }
   render() {
-  
     return `
       <div>
           <svg class="hover-target" width="${this.length + 10}" height="${this.width + 10}" viewBox="-10 -10 ${this.length + 22} ${this.width + 22}" xmlns="http://www.w3.org/2000/svg">
@@ -48,7 +47,6 @@ class Triangle extends Shape {
       </div>
     `;
   }
-  
 }
 
 class Circle extends Shape {
