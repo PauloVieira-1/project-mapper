@@ -45,22 +45,22 @@ function getWebViewContent(
             </a>
         </div>
         <div class="grid-background h-screen mx-4 rounded-lg p-5 relative">
-        <div id="button-menu" class="absolute top-0 right-0 mx-5 my-5 rounded-full px-1 py-2 flex items-center align-center"> 
-          <div class="dropdown">
-  <button id="dropbtn" class=" dropbtn mx-1 rounded-full flex items-center justify-center"><img src="${svgObject.plus}" alt="Add" style="width: 70%; height: 70%;"></button>
-  <div class="dropdown-content">
-    ${squareHtml}
-    ${circleHtml}
-    ${triangleHtml}
-  </div>
-</div>
-          ${arrowHtml}
-        </div>
+            <div id="button-menu" class="absolute top-0 right-0 mx-5 my-5 rounded-full px-1 py-2 flex items-center align-center"> 
+              <div class="dropdown">
+                <button id="dropbtn" class=" dropbtn mx-1 rounded-full flex items-center justify-center"><img src="${svgObject.plus}" alt="Add" style="width: 70%; height: 70%;"></button>
+                <div class="dropdown-content">
+                  ${squareHtml}
+                  ${circleHtml}
+                  ${triangleHtml}
+                </div>
+              </div>
+              ${arrowHtml}
+           </div>
+           <div id = "container">
+             ${shapesHtml}
+           </div>
         </div>
     <div>
-  <div id = "container">
-    ${shapesHtml}
-  </div>
     </body>
     </html>`;
 }

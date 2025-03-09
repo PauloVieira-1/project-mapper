@@ -54,8 +54,8 @@ export function activate(context: vscode.ExtensionContext) {
           vscode.window.showInformationMessage(`Shape added: ${message.text}`);
           shapes.push(message.text);
           context.workspaceState.update("shapes", shapes);
-
           break;
+
         case "Clear":
           shapes.length = 0;
           context.workspaceState.update("shapes", shapes);
