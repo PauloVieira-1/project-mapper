@@ -42,10 +42,11 @@ export function activate(context: vscode.ExtensionContext) {
         list[item] = webViewUri(panel, `src/icons/${item}.svg`).toString();
         return list;
       },
-      {} as { [key: string]: string },
+      {} as { [key: string]: string }, 
     );
 
     const app = new Application(svgResources, panel);
+
     const shapes: string[] = context.workspaceState.get("shapes") || [];
 
     panel.webview.onDidReceiveMessage((message) => {
@@ -70,11 +71,12 @@ export function activate(context: vscode.ExtensionContext) {
 
     setInterval(() => {
       const objectArray: Shape[] = shapes.map((element: string) => {
+        //? Fix this
         return app.createShape(element);
       });
 
       updateWebView(objectArray);
-    }, 800);
+    }, 800); // Request animation frame
 
     const disposable = panel.onDidDispose(() => {
       disposable.dispose();

@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { Shape } from "./shape";
+import { Button } from "./toolBar";
 
 const html = String.raw;
 
@@ -7,18 +8,21 @@ function getWebViewContent(
   cssUri: vscode.Uri,
   svgObject: any,
   shapes: Shape[],
-  buttons: any,
+  buttons: {
+    squareButton: Button;
+    circleButton: Button;
+    triangleButton: Button;
+    arrowButton: Button;
+  },
 ) {
-  const squareHtml = buttons.squareButton ? buttons.squareButton.render() : "";
-  const circleHtml = buttons.circleButton ? buttons.circleButton.render() : "";
-  const triangleHtml = buttons.triangleButton
-    ? buttons.triangleButton.render()
-    : "";
-  const arrowHtml = buttons.arrowButton ? buttons.arrowButton.render() : "";
+  const squareHtml =  buttons.squareButton.render() ?? "";
+  const circleHtml =  buttons.circleButton.render() ?? "";
+  const triangleHtml = buttons.triangleButton.render() ?? "";
+  const arrowHtml = buttons.arrowButton.render() ?? "";
 
   const shapesHtml = shapes
     .map((shape: Shape) => {
-      console.log(typeof shape);
+      console.log(shape);
       return `<div>${shape.render()}</div>`;
     })
     .join("");

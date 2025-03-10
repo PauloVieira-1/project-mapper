@@ -1,21 +1,14 @@
-abstract class Shape {
-  constructor(
-    public length: number,
-    public width: number,
-  ) {
-    this.length = 100;
-    this.width = 100;
-  }
-
-  abstract render(): string;
+interface Shape {
+  length: number;
+  width: number;
+  render(): string;
 }
 
-class Square extends Shape {
+class Square implements Shape {
   constructor(
     public length: number,
     public width: number,
   ) {
-    super(length, width);
   }
   render() {
     return `
@@ -24,18 +17,17 @@ class Square extends Shape {
               <rect x="0" y="0" width="${this.length}" height="${this.width}" rx="5" />
               <circle class="hidden-svg" cx="${this.length + 62}" cy="0" r="8" onclick="vscode.postMessage({command: 'Delete'})" /> 
           </svg>
-      </div>
+      </div> 
 
         `;
-  }
+  } // Consider canvas 
 }
 
-class Triangle extends Shape {
+class Triangle implements Shape {
   constructor(
     public length: number,
     public width: number,
   ) {
-    super(length, width);
   }
   render() {
     return `
@@ -49,12 +41,11 @@ class Triangle extends Shape {
   }
 }
 
-class Circle extends Shape {
+class Circle implements Shape {
   constructor(
     public length: number,
     public width: number,
   ) {
-    super(length, width);
   }
   render() {
     return `

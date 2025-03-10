@@ -3,19 +3,17 @@ import getWebViewContent from "./webViewContent";
 import { Shape } from "./shape";
 import * as vscode from "vscode";
 
-class Application {
-  private svgObject: any;
-  private squareButton: Button | null;
-  private circleButton: Button | null;
-  private triangleButton: Button | null;
-  private arrowButton: Button | null;
+type objectAlias = Record<string, string>
 
-  constructor(resources: any, panel: vscode.WebviewPanel) {
+export default class Application {
+  private svgObject: objectAlias; 
+  private squareButton!: Button;
+  private circleButton!: Button;
+  private triangleButton!: Button;
+  private arrowButton!: Button;
+
+  constructor(resources: objectAlias, panel: vscode.WebviewPanel) {
     this.svgObject = resources;
-    this.squareButton = null;
-    this.circleButton = null;
-    this.triangleButton = null;
-    this.arrowButton = null;
     this.initialize();
   }
 
@@ -24,24 +22,18 @@ class Application {
   }
 
   setUpButtons() {
-    this.squareButton = new CreateShapeButton(
-      this.svgObject.square,
-      "fill",
-      "Add",
-      "Square",
-    ).createButton();
-    this.circleButton = new CreateShapeButton(
-      this.svgObject.circle,
-      "fill",
-      "Add",
-      "Circle",
-    ).createButton();
-    this.triangleButton = new CreateShapeButton(
-      this.svgObject.triangle,
-      "fill",
-      "Add",
-      "Triangle",
-    ).createButton();
+    const createDropDownButton = (svgObject : string, shape: string): Button => {
+      return new CreateShapeButton(
+        svgObject,
+        "fill",
+        "Add",
+        shape
+      ).createButton();
+    };
+    
+    this.squareButton = createDropDownButton(this.svgObject.square, "Square");
+    this.circleButton = createDropDownButton(this.svgObject.circle, "Circle");
+    this.triangleButton = createDropDownButton(this.svgObject.triangle, "Triangle");
     this.arrowButton = new CreateArrowButton(
       this.svgObject.arrow,
       "fill",
@@ -57,17 +49,17 @@ class Application {
     ) {
       throw new Error("Buttons not created");
     }
+
   }
   createShape(buttonName: string): Shape {
     switch (buttonName) {
       case "Circle":
-        return this.circleButton!.addShape("Circle");
       case "Triangle":
-        return this.triangleButton!.addShape("Triangle");
+        return this.triangleButton.addShape(buttonName);
       case "Arrow":
-        return this.arrowButton!.addShape("arrow1");
+        return this.arrowButton.addShape("arrow1");
       default:
-        return this.squareButton!.addShape("Square");
+        return this.squareButton.addShape("Square");
     }
   }
 
@@ -84,6 +76,4 @@ class Application {
   start() {
     console.log("Application started");
   }
-}
-
-export default Application;
+};
