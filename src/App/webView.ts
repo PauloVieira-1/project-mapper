@@ -5,12 +5,19 @@ import * as vscode from "vscode";
 
 type objectAlias = Record<string, string>
 
-export default class Application {
+enum ShapeType {
+  Square = "Square",
+  Triangle = "Triangle",
+  Circle = "Circle",
+}
+
+ class Application {
   private svgObject: objectAlias; 
   private squareButton!: Button;
   private circleButton!: Button;
   private triangleButton!: Button;
   private arrowButton!: Button;
+  public canvas = new Canvas();
 
   constructor(resources: objectAlias, panel: vscode.WebviewPanel) {
     this.svgObject = resources;
@@ -31,9 +38,9 @@ export default class Application {
       ).createButton();
     };
     
-    this.squareButton = createDropDownButton(this.svgObject.square, "Square");
-    this.circleButton = createDropDownButton(this.svgObject.circle, "Circle");
-    this.triangleButton = createDropDownButton(this.svgObject.triangle, "Triangle");
+    this.squareButton = createDropDownButton(this.svgObject.square, ShapeType.Square);
+    this.circleButton = createDropDownButton(this.svgObject.circle, ShapeType.Circle);
+    this.triangleButton = createDropDownButton(this.svgObject.triangle, ShapeType.Triangle);
     this.arrowButton = new CreateArrowButton(
       this.svgObject.arrow,
       "fill",
@@ -51,15 +58,20 @@ export default class Application {
     }
 
   }
+
+  setUpCanvas(objectArray : Shape[]) {
+    this.canvas.setShapes(objectArray);
+  }
+
   createShape(buttonName: string): Shape {
     switch (buttonName) {
-      case "Circle":
-      case "Triangle":
+      case ShapeType.Circle:
+      case ShapeType.Triangle:
         return this.triangleButton.addShape(buttonName);
       case "Arrow":
         return this.arrowButton.addShape("arrow1");
       default:
-        return this.squareButton.addShape("Square");
+        return this.squareButton.addShape(ShapeType.Square);
     }
   }
 
@@ -77,3 +89,24 @@ export default class Application {
     console.log("Application started");
   }
 };
+
+class Canvas {
+  private shapes: Shape[];
+  constructor (){
+    this.shapes = [];
+  }
+
+  setShapes(shapes: Shape[]) {
+    this.shapes = shapes;
+  }
+  getShapes(): Shape[] {
+    return [...this.shapes];
+  }
+
+  addShape(shape: Shape) {
+    this.shapes.push(shape);
+  }
+
+}
+
+export { Application, Canvas, ShapeType };

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Shape } from "./App/shape";
-import Application from "./App/webView";
+import {Application} from "./App/webView";
 
 export function activate(context: vscode.ExtensionContext) {
   const resourceUri = (relativePath: string) => {
@@ -47,12 +47,16 @@ export function activate(context: vscode.ExtensionContext) {
 
     const app = new Application(svgResources, panel);
 
-    const shapes: string[] = context.workspaceState.get("shapes") || [];
+    const shapes: string[]= context.workspaceState.get("shapes") || [];
+    app.setUpCanvas(shapes.map(shape => app.createShape(shape)));
+
 
     panel.webview.onDidReceiveMessage((message) => {
       switch (message.command) {
         case "Add":
           vscode.window.showInformationMessage(`Shape added: ${message.text}`);
+          const newShape = app.createShape(message.text);
+          app.canvas.addShape(newShape);
           shapes.push(message.text);
           context.workspaceState.update("shapes", shapes);
           break;
@@ -60,23 +64,36 @@ export function activate(context: vscode.ExtensionContext) {
         case "Clear":
           shapes.length = 0;
           context.workspaceState.update("shapes", shapes);
+          app.setUpCanvas([]);
           console.log("WORKPLACE CLEARED");
           break;
       }
+
+
     });
+
 
     const updateWebView = (objectArray: Shape[]) => {
       panel.webview.html = app.webViewContent(cssUri, objectArray);
     };
 
-    setInterval(() => {
-      const objectArray: Shape[] = shapes.map((element: string) => {
-        //? Fix this
-        return app.createShape(element);
+    function renderWebView() {
+
+      
+      const renderInterval = setInterval(() => {
+        updateWebView([]);
+        updateWebView(app.canvas.getShapes());
+      }, 800);
+
+      panel.onDidDispose(() => {
+        clearInterval(renderInterval);
       });
 
-      updateWebView(objectArray);
-    }, 800); // Request animation frame
+    }
+
+    renderWebView();
+    
+    //! Request animation frame maybe
 
     const disposable = panel.onDidDispose(() => {
       disposable.dispose();

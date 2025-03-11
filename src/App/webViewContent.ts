@@ -22,7 +22,7 @@ function getWebViewContent(
 
   const shapesHtml = shapes
     .map((shape: Shape) => {
-      console.log(shape);
+      // console.log(shapes);
       return `<div>${shape.render()}</div>`;
     })
     .join("");
