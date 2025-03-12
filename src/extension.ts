@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     const app = new Application(svgResources, panel);
 
-    const shapes: string[]= context.workspaceState.get("shapes") || [];
+    const shapes: string[]= context.workspaceState.get("shapes") || []; // make constant 
     app.setUpCanvas(shapes.map(shape => app.createShape(shape)));
 
 

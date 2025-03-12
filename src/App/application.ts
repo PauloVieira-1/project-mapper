@@ -2,21 +2,15 @@ import { CreateShapeButton, CreateArrowButton, Button } from "./toolBar";
 import getWebViewContent from "./webViewContent";
 import { Shape } from "./shape";
 import * as vscode from "vscode";
+import { objectAlias, ShapeType } from "./types";
 
-type objectAlias = Record<string, string>
-
-enum ShapeType {
-  Square = "Square",
-  Triangle = "Triangle",
-  Circle = "Circle",
-}
 
  class Application {
   private svgObject: objectAlias; 
-  private squareButton!: Button;
-  private circleButton!: Button;
-  private triangleButton!: Button;
-  private arrowButton!: Button;
+  declare private squareButton: Button;
+  declare private circleButton: Button;
+  declare private triangleButton: Button;
+  declare private arrowButton: Button;
   public canvas = new Canvas();
 
   constructor(resources: objectAlias, panel: vscode.WebviewPanel) {
@@ -112,4 +106,4 @@ class Canvas {
 
 class Memento {}
 
-export { Application, Canvas, ShapeType };
+export { Application };

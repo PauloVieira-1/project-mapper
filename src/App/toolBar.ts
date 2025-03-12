@@ -1,4 +1,6 @@
 import { Shape, Square, Triangle, Circle } from "./shape";
+import { ShapeType } from "./types";
+
 
 abstract class ButtonFactory {
   constructor(
@@ -77,9 +79,9 @@ class ShapeButton extends Button {
 
   addShape(type: string): Shape {
     switch (type) {
-      case "Circle":
+      case ShapeType.Circle:
         return new Circle(100, 100);
-      case "Triangle":
+      case ShapeType.Triangle:
         return new Triangle(100, 100);
       default:
         return new Square(100, 100);
