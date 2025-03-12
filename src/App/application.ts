@@ -109,4 +109,7 @@ class Canvas {
 
 }
 
+
+class Memento {}
+
 export { Application, Canvas, ShapeType };

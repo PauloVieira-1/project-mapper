@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Shape } from "./App/shape";
-import {Application} from "./App/webView";
+import {Application} from "./App/application";
 
 export function activate(context: vscode.ExtensionContext) {
   const resourceUri = (relativePath: string) => {
@@ -57,8 +57,8 @@ export function activate(context: vscode.ExtensionContext) {
           vscode.window.showInformationMessage(`Shape added: ${message.text}`);
           const newShape = app.createShape(message.text);
           app.canvas.addShape(newShape);
-          shapes.push(message.text);
-          context.workspaceState.update("shapes", shapes);
+          // shapes.push(message.text);
+          context.workspaceState.update("shapes", [...shapes, message.text]);
           break;
 
         case "Clear":
@@ -79,7 +79,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     function renderWebView() {
 
-      
       const renderInterval = setInterval(() => {
         updateWebView([]);
         updateWebView(app.canvas.getShapes());
@@ -88,16 +87,14 @@ export function activate(context: vscode.ExtensionContext) {
       panel.onDidDispose(() => {
         clearInterval(renderInterval);
       });
-
+      
+      panel.onDidDispose(() => clearInterval(renderInterval));
     }
 
     renderWebView();
     
     //! Request animation frame maybe
 
-    const disposable = panel.onDidDispose(() => {
-      disposable.dispose();
-    });
   });
 
   context.subscriptions.push(open);
