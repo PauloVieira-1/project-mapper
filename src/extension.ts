@@ -50,12 +50,12 @@ export function activate(context: vscode.ExtensionContext) {
     const app = new Application(svgResources, panel);
     const shapes: string[]= context.workspaceState.get("shapes") || []; 
     app.setUpCanvas(shapes.map(shape => app.createShape(shape)));
-    panel.webview.html = app.webViewContent(cssUri, app.canvas.getShapes());
-
+    
     const updateWebView = () => {
       panel.webview.html = app.webViewContent(cssUri, app.canvas.getShapes());
     };
 
+    updateWebView();
     app.canvas.shapeManager.addListener(updateWebView);
     
     // START OF APP
@@ -76,24 +76,6 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
     });
-
-    // function renderWebView() {
-
-    //   const renderInterval = setInterval(() => {
-    //     updateWebView([]);
-    //     updateWebView(app.canvas.getShapes());
-    //   }, 800);
-
-    //   panel.onDidDispose(() => {
-    //     clearInterval(renderInterval);
-    //   });
-      
-    //   panel.onDidDispose(() => clearInterval(renderInterval));
-    // }
-
-    // renderWebView();
-    
-    //! Request animation frame maybe
 
   });
 
