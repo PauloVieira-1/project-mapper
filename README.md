@@ -1,71 +1,62 @@
-# vs-window README
+```
+```
+# Project Mapper 
 
-This is the README for your extension "vs-window". After writing up a brief description, we recommend including the following sections.
+## Description
+Project Mapper is a VS Code extension designed to create mind maps and UML diagrams to assist in project planning. The extension provides an intuitive interface within VS Code for visualizing project structures, organizing ideas, and mapping out dependencies efficiently.
 
 ## Features
+- **Mind Mapping** – Create and edit dynamic mind maps to structure ideas.
+- **UML Diagramming** – Design and manage UML diagrams for system planning.
+- **Task Dependencies** – Define and visualize dependencies between tasks.
+- **Integration with VS Code** – Seamlessly integrates into VS Code as an extension.
+- **Data Persistence** – Save and load diagrams directly from the workspace.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## Technologies Used
+- **Frontend:** TypeScript (VS Code Webview UI)
+- **Backend:** Node.js (VS Code Extension API)
+- **State Management:** VS Code workspaceState
+- **Packaging & Deployment:** VS Code Extension Marketplace
 
-For example if there is an image subfolder under your extension project workspace:
+## Installation & Setup
+### Prerequisites
+Ensure you have the following installed:
+- VS Code (latest version)
+- Node.js (>= 16.x)
 
-\!\[feature X\]\(images/feature-x.png\)
+### Clone the Repository
+```sh
+git clone https://github.com/PauloVieira-1/project-mapper.git
+cd project-mapper
+```
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### Install Dependencies
+```sh
+npm install  
+```
 
-## Requirements
+### Build & Run the Extension
+```sh
+npm run build
+npm run package  # Packages the extension
+code --install-extension project-mapper.vsix 
+```
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+### Usage
+- Open VS Code and navigate to the **Extensions** tab.
+- Search for **Project Mapper** and install the extension (if published).
+- Open the command palette (`Ctrl+Shift+P`) and run `Project Mapper: Launch`.
+- Create a a diagram
+- Organize ideas, define task dependencies, and visualize system structures.
+- Save and load diagrams directly within your VS Code workspace.
 
-## Extension Settings
+## Future Development
+- **Export & Import** – Support exporting diagrams as JSON, SVG, or PNG.
+- **Real-Time Collaboration** – Enable live updates across multiple users.
+- **Ability to Create Diagrams of different types** – User will bre created with diagram options upon launching
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-For example:
-
-This extension contributes the following settings:
-
-- `myExtension.enable`: Enable/disable this extension.
-- `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-- [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-- Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-- Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-- Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-- [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-- [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+```
+```
