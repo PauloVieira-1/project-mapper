@@ -3,6 +3,7 @@ import getWebViewContent from "./webViewContent";
 import { Shape } from "./shape";
 import * as vscode from "vscode";
 import { objectAlias, ShapeType } from "./types";
+import { listeners, removeListener } from "process";
 
 
  class Application {
@@ -84,14 +85,38 @@ import { objectAlias, ShapeType } from "./types";
   }
 };
 
+class ShapeManager {
+  declare private listeners: (() => void)[];
+
+  constructor() {
+    this.listeners = [];
+
+  }
+
+  addListener(listener: () => void) {
+    this.listeners.push(listener);
+  }
+
+  removeListener(listener: () => void) {
+    this.listeners = this.listeners.filter((l) => l !== listener);
+  }
+
+  notifyListeners() {
+    this.listeners.forEach((listener) => listener());
+  }
+}
+
 class Canvas {
   private shapes: Shape[];
+  public shapeManager = new ShapeManager();
+
   constructor (){
     this.shapes = [];
   }
 
   setShapes(shapes: Shape[]) {
     this.shapes = shapes;
+    this.shapeManager.notifyListeners();
   }
   getShapes(): Shape[] {
     return [...this.shapes];
@@ -99,10 +124,15 @@ class Canvas {
 
   addShape(shape: Shape) {
     this.shapes.push(shape);
+    this.shapeManager.notifyListeners();
+  }
+
+  removeShape(shape: Shape) {
+    this.shapes = this.shapes.filter((s) => s !== shape);
+    this.shapeManager.notifyListeners();
   }
 
 }
-
 
 class Memento {}
 

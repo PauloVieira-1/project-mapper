@@ -45,53 +45,53 @@ export function activate(context: vscode.ExtensionContext) {
       {} as { [key: string]: string }, 
     );
 
+    // START OF APP
+
     const app = new Application(svgResources, panel);
-
-    const shapes: string[]= context.workspaceState.get("shapes") || []; // make constant 
+    const shapes: string[]= context.workspaceState.get("shapes") || []; 
     app.setUpCanvas(shapes.map(shape => app.createShape(shape)));
+    panel.webview.html = app.webViewContent(cssUri, app.canvas.getShapes());
 
+    const updateWebView = () => {
+      panel.webview.html = app.webViewContent(cssUri, app.canvas.getShapes());
+    };
+
+    app.canvas.shapeManager.addListener(updateWebView);
+    
+    // START OF APP
 
     panel.webview.onDidReceiveMessage((message) => {
       switch (message.command) {
         case "Add":
           vscode.window.showInformationMessage(`Shape added: ${message.text}`);
-          const newShape = app.createShape(message.text);
-          app.canvas.addShape(newShape);
-          // shapes.push(message.text);
+          app.canvas.addShape(app.createShape(message.text));
           context.workspaceState.update("shapes", [...shapes, message.text]);
           break;
 
         case "Clear":
-          shapes.length = 0;
-          context.workspaceState.update("shapes", shapes);
+          context.workspaceState.update("shapes", []);
           app.setUpCanvas([]);
           console.log("WORKPLACE CLEARED");
           break;
       }
 
-
     });
 
+    // function renderWebView() {
 
-    const updateWebView = (objectArray: Shape[]) => {
-      panel.webview.html = app.webViewContent(cssUri, objectArray);
-    };
+    //   const renderInterval = setInterval(() => {
+    //     updateWebView([]);
+    //     updateWebView(app.canvas.getShapes());
+    //   }, 800);
 
-    function renderWebView() {
-
-      const renderInterval = setInterval(() => {
-        updateWebView([]);
-        updateWebView(app.canvas.getShapes());
-      }, 800);
-
-      panel.onDidDispose(() => {
-        clearInterval(renderInterval);
-      });
+    //   panel.onDidDispose(() => {
+    //     clearInterval(renderInterval);
+    //   });
       
-      panel.onDidDispose(() => clearInterval(renderInterval));
-    }
+    //   panel.onDidDispose(() => clearInterval(renderInterval));
+    // }
 
-    renderWebView();
+    // renderWebView();
     
     //! Request animation frame maybe
 
