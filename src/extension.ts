@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { Shape } from "./App/shape";
 import {Application} from "./App/application";
 
 export function activate(context: vscode.ExtensionContext) {

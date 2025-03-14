@@ -3,7 +3,6 @@ import getWebViewContent from "./webViewContent";
 import { Shape } from "./shape";
 import * as vscode from "vscode";
 import { objectAlias, ShapeType } from "./types";
-import { listeners, removeListener } from "process";
 
 
  class Application {
@@ -98,11 +97,11 @@ class ShapeManager {
   }
 
   removeListener(listener: () => void) {
-    this.listeners = this.listeners.filter((l) => l !== listener);
+    this.listeners = this.listeners.filter(l => l !== listener);
   }
 
   notifyListeners() {
-    this.listeners.forEach((listener) => listener());
+    this.listeners.forEach(listener=> listener());
   }
 }
 
