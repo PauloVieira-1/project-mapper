@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
       {} as { [key: string]: string }, 
     );
 
-    // START OF APP
+    // START 
 
     const app = new Application(svgResources, panel);
     const shapes: {shape: string, id: number}[]= context.workspaceState.get("shapes") || []; 
@@ -63,7 +63,7 @@ export function activate(context: vscode.ExtensionContext) {
     updateWebView();
     app.canvas.shapeManager.addListener(updateWebView);
     
-    // START OF APP
+    // END OF START
 
     panel.webview.onDidReceiveMessage((message) => {
       switch (message.command) {

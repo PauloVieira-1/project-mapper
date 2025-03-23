@@ -99,17 +99,10 @@ svg rect:hover, svg circle:hover, svg line:hover, svg polygon:hover{
 }
 
 .hidden-svg {
-  display: none;
-  position: absolute;
-  top: 100%; 
-  left: 50%;
-  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
   fill: #de4e4e !important;
-
-}
-
-.hidden-svg:hover {
-  fill: #a53a3a !important;
+  pointer-events: none; /* Prevents interaction when invisible */
 }
 
 .hover-target {
@@ -119,5 +112,23 @@ svg rect:hover, svg circle:hover, svg line:hover, svg polygon:hover{
 }
 
 .hover-target:hover .hidden-svg {
-  display: block;
+  opacity: 1;
+  pointer-events: all; /* Restores interaction on hover */
+}
+
+.hidden-svg circle {
+  fill: #de4e4e !important;
+}
+
+.hidden-svg:hover circle {
+  fill: #a53a3a !important;
+}
+
+.hidden-svg line {
+  stroke: white;
+  stroke-width: 2;
+}
+
+.hidden-svg:hover line {
+  stroke: #f5f5f5; /* Slightly lighter on hover */
 }
