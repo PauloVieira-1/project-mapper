@@ -57,17 +57,18 @@ import { objectAlias, ShapeType } from "./types";
     this.canvas.setShapes(objectArray);
   }
 
-  createShape(buttonName: string): Shape {
+  createShape(buttonName: string, id: number): Shape {
     switch (buttonName) {
       case ShapeType.Circle:
       case ShapeType.Triangle:
-        return this.triangleButton.addShape(buttonName);
+        return this.triangleButton.addShape(buttonName, id);
       case "Arrow":
-        return this.arrowButton.addShape("arrow1");
+        return this.arrowButton.addShape("arrow1", id);
       default:
-        return this.squareButton.addShape(ShapeType.Square);
+        return this.squareButton.addShape(ShapeType.Square, id);
     }
   }
+
 
   webViewContent(cssUri: vscode.Uri, shapes: Shape[]) {
     const html = getWebViewContent(cssUri, this.svgObject, shapes, {
@@ -126,13 +127,13 @@ class Canvas {
     this.shapeManager.notifyListeners();
   }
 
-  removeShape(shape: Shape) {
-    this.shapes = this.shapes.filter((s) => s !== shape);
+  removeShape(id: number) {
+    this.shapes = this.shapes.filter((s) => s.id !== id);
     this.shapeManager.notifyListeners();
   }
 
 }
 
-class Memento {}
+// class Memento {}
 
 export { Application };
