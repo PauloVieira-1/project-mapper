@@ -14,7 +14,7 @@ class Square implements Shape {
   }
   render() {
     return `
-      <div>
+    <div id="shape">
     <svg class="hover-target" width="${this.length + 50}" height="${this.width + 20}" 
          viewBox="-10 -10 ${this.length + 70} ${this.width + 20}" 
          xmlns="http://www.w3.org/2000/svg">
