@@ -42,6 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
       "square",
       "triangle",
       "circle",
+      "trash"
     ].reduce(
       (list, item) => {
         list[item] = webViewUri(panel, `src/icons/${item}.svg`).toString();

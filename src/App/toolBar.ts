@@ -7,7 +7,7 @@ abstract class ButtonFactory {
     public iconPath: string,
     public functionType: string,
     public name: string,
-    public text: string,
+    public text: string | null,
   ) {}
 
   abstract createButton(): Button;
@@ -24,9 +24,9 @@ class CreateShapeButton extends ButtonFactory {
   }
 }
 
-class CreateArrowButton extends ButtonFactory {
+class CreateToolButton extends ButtonFactory {
   createButton(): Button {
-    return new ArrowButton(
+    return new ToolButton(
       this.iconPath,
       this.functionType,
       this.name,
@@ -40,7 +40,7 @@ abstract class Button {
     public iconPath: string,
     public functionType: string,
     public command: string,
-    public text: string,
+    public text: string | null,
   ) {}
 
   abstract render(): string;
@@ -52,7 +52,7 @@ class ShapeButton extends Button {
     public iconPath: string,
     public functionType: string,
     public command: string,
-    public text: string,
+    public text: string | null,
   ) {
     super(iconPath, functionType, command, text);
   }
@@ -71,9 +71,9 @@ class ShapeButton extends Button {
                 </div>
                  </a>`;
       case "outline":
-        return `<button id="button${this.command}" class="mx-1 rounded-full flex items-center justify-center button-add"><img src="${this.iconPath}" alt="${this.command}" style="width: 70%; height: 70%;"></button>`;
+        return `<button id="button${this.command}" class="mx-1 rounded-full flex items-center justify-center button-add"><img src="${this.iconPath}" alt="${this.command}" style="width: 55%; height: 55%;"></button>`;
       default:
-        return `<button id="button${this.command}" class="mx-1 rounded-full flex items-center justify-center button-add"><img src="${this.iconPath}" alt="${this.command}" style="width: 70%; height: 70%;"></button>`;
+        return `<button id="button${this.command}" class="mx-1 rounded-full flex items-center justify-center button-add"><img src="${this.iconPath}" alt="${this.command}" style="width: 55%; height: 55%;"></button>`;
     }
   }
 
@@ -90,12 +90,12 @@ class ShapeButton extends Button {
   }
 }
 
-class ArrowButton extends Button {
+class ToolButton extends Button {
   constructor(
     public iconPath: string,
     public functionType: string,
     public command: string,
-    public text: string,
+    public text: string | null,
   ) {
     super(iconPath, functionType, command, text);
   }
@@ -104,7 +104,7 @@ class ArrowButton extends Button {
     return `<button onclick="vscode.postMessage({
                         command: 'Clear',
                     })" 
-                    id="button-arrow" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.command}" style="width: 70%; height: 70%;"></button>`;
+                    id="button-arrow" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.command}" style="width: 55%; height: 55%;"></button>`;
   }
 
   addShape(type: string, id: number): Shape {
@@ -114,8 +114,8 @@ class ArrowButton extends Button {
 
 export {
   ShapeButton,
-  ArrowButton,
+  ToolButton,
   CreateShapeButton,
-  CreateArrowButton,
+  CreateToolButton,
   Button,
 };

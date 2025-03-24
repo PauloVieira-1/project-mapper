@@ -76,6 +76,20 @@
   color: white;
 }
 
+.dropdown-content button svg {
+  width: 5vh;
+  height: 5vh;
+  margin-right: 10px;
+  fill: #0098ff;
+  transition: fill 0.3s ease;
+}
+
+.dropdown-content a:hover div img {
+  width: 2.3vh !important;
+  height: 2.3vh !important;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
 .dropdown:hover .dropdown-content {
   display: block;
 }

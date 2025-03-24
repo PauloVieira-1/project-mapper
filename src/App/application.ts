@@ -1,4 +1,4 @@
-import { CreateShapeButton, CreateArrowButton, Button } from "./toolBar";
+import { CreateShapeButton, CreateToolButton, Button } from "./toolBar";
 import getWebViewContent from "./webViewContent";
 import { Shape } from "./shape";
 import * as vscode from "vscode";
@@ -11,6 +11,7 @@ import { objectAlias, ShapeType } from "./types";
   declare private circleButton: Button;
   declare private triangleButton: Button;
   declare private arrowButton: Button;
+  declare private trashButton: Button;
   public canvas = new Canvas();
 
   constructor(resources: objectAlias, panel: vscode.WebviewPanel) {
@@ -35,11 +36,18 @@ import { objectAlias, ShapeType } from "./types";
     this.squareButton = createDropDownButton(this.svgObject.square, ShapeType.Square);
     this.circleButton = createDropDownButton(this.svgObject.circle, ShapeType.Circle);
     this.triangleButton = createDropDownButton(this.svgObject.triangle, ShapeType.Triangle);
-    this.arrowButton = new CreateArrowButton(
+    this.arrowButton = new CreateToolButton(
       this.svgObject.arrow,
       "fill",
       "Add",
-      "Arrow",
+      null,
+    ).createButton();
+    
+    this.trashButton = new CreateToolButton(
+      this.svgObject.trash,
+      "fill",
+      "Clear",
+      null
     ).createButton();
 
     if (
@@ -76,6 +84,7 @@ import { objectAlias, ShapeType } from "./types";
       circleButton: this.circleButton,
       triangleButton: this.triangleButton,
       arrowButton: this.arrowButton,
+      trashButton: this.trashButton
     });
     return html;
   }

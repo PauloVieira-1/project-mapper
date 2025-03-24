@@ -13,12 +13,14 @@ function getWebViewContent(
     circleButton: Button;
     triangleButton: Button;
     arrowButton: Button;
+    trashButton: Button;
   },
 ) {
   const squareHtml =  buttons.squareButton.render() ?? "";
   const circleHtml =  buttons.circleButton.render() ?? "";
   const triangleHtml = buttons.triangleButton.render() ?? "";
   const arrowHtml = buttons.arrowButton.render() ?? "";
+  const trashHtml = buttons.trashButton.render() ?? "";
 
   const shapesHtml = shapes
     .map((shape: Shape) => {
@@ -72,6 +74,7 @@ function getWebViewContent(
                 </div>
               </div>
               ${arrowHtml}
+              ${trashHtml}
            </div>
            <div id = "container">
              ${shapesHtml}
