@@ -14,13 +14,13 @@ class Square implements Shape {
   }
   render() {
     return `
-    <div id="shape">
+    <div>
     <svg class="hover-target" width="${this.length + 50}" height="${this.width + 20}" 
          viewBox="-10 -10 ${this.length + 70} ${this.width + 20}" 
          xmlns="http://www.w3.org/2000/svg">
         
         <!-- Rectangle -->
-        <rect x="0" y="0" width="${this.length}" height="${this.width}" rx="5" fill="none"/>
+        <rect id="shape" x="0" y="0" width="${this.length}" height="${this.width}" rx="5" fill="none"/>
 
         <!-- Circle with 'X' -->
         <g class="hidden-svg" onclick="vscode.postMessage({command: 'Remove', text: 'Square', id: ${this.id}})">

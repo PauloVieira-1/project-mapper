@@ -22,8 +22,7 @@ function getWebViewContent(
 
   const shapesHtml = shapes
     .map((shape: Shape) => {
-      // console.log(shapes);
-      return `<div id="shape" >${shape.render()}</div>`;
+      return `<div >${shape.render()}</div>`;
     })
     .join("");
 
@@ -37,24 +36,20 @@ function getWebViewContent(
         <link rel="stylesheet" type="text/css" href="${cssUri}">
     </head>
     <script>
-
+  
       const vscode = acquireVsCodeApi();
+      
+        document.addEventListener("DOMContentLoaded", function () {
+    const shape = document.getElementById("shape");
 
-      document.addEventListener("DOMContentLoaded", function () {
-        const shape = document.getElementById("shape");
-        if (shape) {
-          shape.addEventListener("click", handleClick);
-        }
+    if (shape) {
+      shape.addEventListener("click", function () {
+        console.log("SHAPE CLICKED!!");
       });
-
-      function handleClick(e) {
-        const shapeElement = e.target.closest("#shape");
-
-        if (shapeElement) {
-          console.log("SHAPE CLICKED!!");
-        }
-      }
-
+    } else {
+      console.warn("Element with ID 'shape' not found.");
+    }
+  });
 
     </script>
     <body>
