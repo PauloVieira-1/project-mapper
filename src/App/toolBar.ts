@@ -1,5 +1,6 @@
 import { Shape, Square, Triangle, Circle } from "./shape";
-import { ShapeType } from "./types";
+import { ShapeType, ColorType } from "./types";
+
 
 
 abstract class ButtonFactory {
@@ -81,11 +82,11 @@ class ShapeButton extends Button {
   addShape(type: string, id: number): Shape {
     switch (type) {
       case ShapeType.Circle:
-        return new Circle(100, 100, id);
+        return new Circle(100, 100, id, ColorType.White);
       case ShapeType.Triangle:
-        return new Triangle(100, 100, id);
+        return new Triangle(100, 100, id, ColorType.White);
       default:
-        return new Square(100, 100, id);
+        return new Square(100, 100, id, ColorType.White);
     }
   }
 }
@@ -108,7 +109,7 @@ class ToolButton extends Button {
   }
 
   addShape(type: string, id: number): Shape {
-    return new Square(100, 100, id);
+    return new Square(100, 100, id, ColorType.White);
   }
 }
 

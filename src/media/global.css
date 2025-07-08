@@ -99,18 +99,18 @@
 }
 
 
-svg rect, svg circle, svg line, svg polygon{
+/* svg rect, svg circle, svg line, svg polygon{
   fill: #0098ff;
-}
+} */
 
 svg:hover .close{
   display: block;
   fill: #ff0000;
 }
 
-svg rect:hover, svg circle:hover, svg line:hover, svg polygon:hover{
+/* svg rect:hover, svg circle:hover, svg line:hover, svg polygon:hover{
   fill: #0065a9;
-}
+} */
 
 .hidden-svg {
   opacity: 0;

@@ -2,7 +2,7 @@ import { CreateShapeButton, CreateToolButton, Button } from "./toolBar";
 import getWebViewContent from "./webViewContent";
 import { Shape } from "./shape";
 import * as vscode from "vscode";
-import { objectAlias, ShapeType } from "./types";
+import { objectAlias, ShapeType, ColorType, CommandType } from "./types";
 
 
  class Application {
@@ -27,8 +27,8 @@ import { objectAlias, ShapeType } from "./types";
     const createDropDownButton = (svgObject : string, shape: string): Button => {
       return new CreateShapeButton(
         svgObject,
-        "fill",
-        "Add",
+        CommandType.fill,
+        CommandType.AddShape,
         shape
       ).createButton();
     };
@@ -38,15 +38,15 @@ import { objectAlias, ShapeType } from "./types";
     this.triangleButton = createDropDownButton(this.svgObject.triangle, ShapeType.Triangle);
     this.arrowButton = new CreateToolButton(
       this.svgObject.arrow,
-      "fill",
-      "Add",
+       CommandType.fill,
+      CommandType.AddShape,
       null,
     ).createButton();
     
     this.trashButton = new CreateToolButton(
       this.svgObject.trash,
-      "fill",
-      "Clear",
+         CommandType.fill,
+        CommandType.Clear,
       null
     ).createButton();
 
@@ -71,7 +71,7 @@ import { objectAlias, ShapeType } from "./types";
       case ShapeType.Triangle:
         return this.triangleButton.addShape(buttonName, id);
       case "Arrow":
-        return this.arrowButton.addShape("arrow1", id);
+        return this.arrowButton.addShape(ShapeType.Arrow, id);
       default:
         return this.squareButton.addShape(ShapeType.Square, id);
     }
