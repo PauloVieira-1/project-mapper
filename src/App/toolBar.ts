@@ -45,7 +45,7 @@ abstract class Button {
   ) {}
 
   abstract render(): string;
-  abstract addShape(type: string, id: number): Shape;
+  abstract addShape(type: string, id: number, color: ColorType): Shape;
 }
 
 class ShapeButton extends Button {
@@ -79,14 +79,14 @@ class ShapeButton extends Button {
   }
 
 
-  addShape(type: string, id: number): Shape {
+  addShape(type: string, id: number, color: ColorType): Shape {
     switch (type) {
       case ShapeType.Circle:
-        return new Circle(100, 100, id, ColorType.White);
+        return new Circle(100, 100, id, color);
       case ShapeType.Triangle:
-        return new Triangle(100, 100, id, ColorType.White);
+        return new Triangle(100, 100, id, color);
       default:
-        return new Square(100, 100, id, ColorType.White);
+        return new Square(100, 100, id, color);
     }
   }
 }
@@ -108,8 +108,8 @@ class ToolButton extends Button {
                     id="button-arrow" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.command}" style="width: 55%; height: 55%;"></button>`;
   }
 
-  addShape(type: string, id: number): Shape {
-    return new Square(100, 100, id, ColorType.White);
+  addShape(type: string, id: number, color: ColorType): Shape {
+    return new Square(100, 100, id, color);
   }
 }
 

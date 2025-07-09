@@ -65,15 +65,16 @@ import { objectAlias, ShapeType, ColorType, CommandType } from "./types";
     this.canvas.setShapes(objectArray);
   }
 
-  createShape(buttonName: string, id: number): Shape {
+  createShape(buttonName: string, id: number, color: ColorType): Shape {
     switch (buttonName) {
       case ShapeType.Circle:
+        return this.circleButton.addShape(ShapeType.Circle, id, color);
       case ShapeType.Triangle:
-        return this.triangleButton.addShape(buttonName, id);
-      case "Arrow":
-        return this.arrowButton.addShape(ShapeType.Arrow, id);
+        return this.triangleButton.addShape(ShapeType.Triangle, id, color);
+      case ShapeType.Arrow:
+        return this.arrowButton.addShape(ShapeType.Arrow, id, color);
       default:
-        return this.squareButton.addShape(ShapeType.Square, id);
+        return this.squareButton.addShape(ShapeType.Square, id, color);
     }
   }
 
@@ -138,6 +139,16 @@ class Canvas {
 
   removeShape(id: number) {
     this.shapes = this.shapes.filter((s) => s.id !== id);
+    this.shapeManager.notifyListeners();
+  }
+
+  changeColor(id: number, color: ColorType) {
+    this.shapes = this.shapes.map((s) => {
+      if (s.id === id) {
+        s.setColor(color);
+      }
+      return s;
+    });
     this.shapeManager.notifyListeners();
   }
 

@@ -8,11 +8,11 @@ enum ShapeType {
 }
 
 enum ColorType {
-  Orange = "#FE7743",
-  LightBlue = "#273F4F",
-  DarkBlue = "#447D9B",
-  Grey = "#D7D7D7",
-  White = "#FFFFFF",
+  Red = "#ffb3ba",
+  Orange = "#ffdfba",
+  Yellow = "#ffffba",
+  Green = "#baffc9",
+  DarkBlue = "#bae1ff",
 }
 
 enum CommandType {
