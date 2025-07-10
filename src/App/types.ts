@@ -1,6 +1,6 @@
-type objectAlias = Record<string, string>
+type objectAlias = Record<string, string>;
 
-enum ShapeType { 
+enum ShapeType {
   Square = "Square",
   Triangle = "Triangle",
   Circle = "Circle",

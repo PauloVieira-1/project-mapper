@@ -1,7 +1,18 @@
 .grid-background {
   background-color: #323232;
+  border-color: #323232;
   height: 77vh;
   width: 95vw;
+  background-repeat: repeat;
+  background-position: center;
+  background-size: 200px 200px;
+}
+
+ #svgCanvas {
+  background-color: #323232;
+  border-color:  #323232;;
+  height: 100%;
+  width: 100%;
   background-repeat: repeat;
   background-position: center;
   background-size: 200px 200px;
@@ -151,3 +162,6 @@ svg:hover .close{
   cursor: pointer;
   /* position: fixed; */
 }
+
+
+

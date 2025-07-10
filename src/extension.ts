@@ -49,7 +49,12 @@ export function activate(context: vscode.ExtensionContext) {
     const cssUri = webViewUri(panel, "src/media/global.css");
 
     const svgResources = [
-      "plus", "arrow", "square", "triangle", "circle", "trash"
+      "plus",
+      "arrow",
+      "square",
+      "triangle",
+      "circle",
+      "trash",
     ].reduce(
       (list, item) => {
         list[item] = webViewUri(panel, `src/icons/${item}.svg`).toString();
@@ -60,9 +65,23 @@ export function activate(context: vscode.ExtensionContext) {
 
     // START: Setup application and restore saved shapes
     const app = new Application(svgResources, panel);
-    let shapes: { shape: string, id: number, color: ColorType }[] = context.workspaceState.get("shapes") || [];
+    let shapes: {
+      shape: string;
+      id: number;
+      color: ColorType;
+      coordinates: { x: number; y: number };
+    }[] = context.workspaceState.get("shapes") || [];
 
-    app.setUpCanvas(shapes.map(shape => app.createShape(shape.shape, shape.id, shape.color)));
+    app.setUpCanvas(
+      shapes.map(({ shape, id, color, coordinates }) =>
+        app.createShape(
+          shape,
+          id,
+          color,
+          coordinates ?? { x: 0, y: 0 } // fallback to default
+        )
+      )
+    );
 
     const updateWebView = () => {
       panel.webview.html = app.webViewContent(cssUri, app.canvas.getShapes());
@@ -74,51 +93,93 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Handle incoming messages from webview
     panel.webview.onDidReceiveMessage((message) => {
-      shapes = context.workspaceState.get("shapes") || []; // <-- re-fetch state to avoid stale array
+      shapes = context.workspaceState.get("shapes") || []; 
 
       switch (message.command) {
         case "Add":
           const shapeId = idGenerator();
           vscode.window.showInformationMessage(`Shape added: ${message.text}`);
 
-          app.canvas.addShape(app.createShape(message.text, shapeId, ColorType.DarkBlue));
+          app.canvas.addShape(
+            app.createShape(message.text, shapeId, ColorType.DarkBlue, {
+              x: 0,
+              y: 0,
+            }),
+          );
 
           // Update persistent storage
-          const newShapes = [...shapes, {
+         const newShapes = [...shapes, {
             shape: message.text,
             id: shapeId,
-            color: ColorType.DarkBlue
+            color: ColorType.DarkBlue,
+            coordinates: { x: 0, y: 0 }  
           }];
           context.workspaceState.update("shapes", newShapes);
           break;
 
         case "Remove":
           console.log("REMOVED");
-          const shapeToRemove = app.canvas.getShapes().find(shape => shape.id === message.id);
+          const shapeToRemove = app.canvas
+            .getShapes()
+            .find((shape) => shape.id === message.id);
           if (shapeToRemove) {
             app.canvas.removeShape(shapeToRemove.id);
 
             // Remove from state and update
-            const updatedShapes = shapes.filter(shape => shape.id !== message.id);
+            const updatedShapes = shapes.filter(
+              (shape) => shape.id !== message.id,
+            );
             context.workspaceState.update("shapes", updatedShapes);
           }
           break;
 
         case "Color":
           console.log("COLOR CHANGED");
-          const shapeToColor = app.canvas.getShapes().find(shape => shape.id === message.id);
+          const shapeToColor = app.canvas
+            .getShapes()
+            .find((shape) => shape.id === message.id);
           if (shapeToColor) {
             const newColor = getNextEnumValue(shapeToColor.color);
             app.canvas.changeColor(shapeToColor.id, newColor);
 
             // Update color in state
-            const recoloredShapes = shapes.map(shape =>
-              shape.id === message.id ? { ...shape, color: newColor } : shape
+            const recoloredShapes = shapes.map((shape) =>
+              shape.id === message.id ? { ...shape, color: newColor } : shape,
             );
             context.workspaceState.update("shapes", recoloredShapes);
           }
           break;
+        case "Move":
+          // vscode.window.showInformationMessage(`Shape moved: ${message.text}`);
+          console.log("Moved by", message.translateX, message.translateY);
 
+          const shapeToMove = app.canvas
+            .getShapes()
+            .find((shape) => shape.id === message.id);
+
+          if (shapeToMove) {
+            app.canvas.moveShape(
+              shapeToMove.id,
+              message.translateX,
+              message.translateY,
+            );
+
+            const updatedShapes = shapes.map((shape) =>
+              shape.id === message.id
+                ? {
+                    ...shape,
+                    coordinates: {
+                      x: message.translateX,
+                      y: message.translateY,
+                    },
+                  }
+                : shape,
+            );
+
+            context.workspaceState.update("shapes", updatedShapes);
+          }
+
+          break;
         case "Clear":
           // Clear all shapes from canvas and state
           context.workspaceState.update("shapes", []);

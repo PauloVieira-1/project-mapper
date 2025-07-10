@@ -4,9 +4,8 @@ import { Shape } from "./shape";
 import * as vscode from "vscode";
 import { objectAlias, ShapeType, ColorType, CommandType } from "./types";
 
-
- class Application {
-  private svgObject: objectAlias; 
+class Application {
+  private svgObject: objectAlias;
   declare private squareButton: Button;
   declare private circleButton: Button;
   declare private triangleButton: Button;
@@ -24,30 +23,39 @@ import { objectAlias, ShapeType, ColorType, CommandType } from "./types";
   }
 
   setUpButtons() {
-    const createDropDownButton = (svgObject : string, shape: string): Button => {
+    const createDropDownButton = (svgObject: string, shape: string): Button => {
       return new CreateShapeButton(
         svgObject,
         CommandType.fill,
         CommandType.AddShape,
-        shape
+        shape,
       ).createButton();
     };
-    
-    this.squareButton = createDropDownButton(this.svgObject.square, ShapeType.Square);
-    this.circleButton = createDropDownButton(this.svgObject.circle, ShapeType.Circle);
-    this.triangleButton = createDropDownButton(this.svgObject.triangle, ShapeType.Triangle);
+
+    this.squareButton = createDropDownButton(
+      this.svgObject.square,
+      ShapeType.Square,
+    );
+    this.circleButton = createDropDownButton(
+      this.svgObject.circle,
+      ShapeType.Circle,
+    );
+    this.triangleButton = createDropDownButton(
+      this.svgObject.triangle,
+      ShapeType.Triangle,
+    );
     this.arrowButton = new CreateToolButton(
       this.svgObject.arrow,
-       CommandType.fill,
+      CommandType.fill,
       CommandType.AddShape,
       null,
     ).createButton();
-    
+
     this.trashButton = new CreateToolButton(
       this.svgObject.trash,
-         CommandType.fill,
-        CommandType.Clear,
-      null
+      CommandType.fill,
+      CommandType.Clear,
+      null,
     ).createButton();
 
     if (
@@ -58,26 +66,49 @@ import { objectAlias, ShapeType, ColorType, CommandType } from "./types";
     ) {
       throw new Error("Buttons not created");
     }
-
   }
 
-  setUpCanvas(objectArray : Shape[]) {
+  setUpCanvas(objectArray: Shape[]) {
     this.canvas.setShapes(objectArray);
   }
 
-  createShape(buttonName: string, id: number, color: ColorType): Shape {
+  createShape(
+    buttonName: string,
+    id: number,
+    color: ColorType,
+    coordinates: { x: number; y: number },
+  ): Shape {
     switch (buttonName) {
       case ShapeType.Circle:
-        return this.circleButton.addShape(ShapeType.Circle, id, color);
+        return this.circleButton.addShape(
+          ShapeType.Circle,
+          id,
+          color,
+          coordinates,
+        );
       case ShapeType.Triangle:
-        return this.triangleButton.addShape(ShapeType.Triangle, id, color);
+        return this.triangleButton.addShape(
+          ShapeType.Triangle,
+          id,
+          color,
+          coordinates,
+        );
       case ShapeType.Arrow:
-        return this.arrowButton.addShape(ShapeType.Arrow, id, color);
+        return this.arrowButton.addShape(
+          ShapeType.Arrow,
+          id,
+          color,
+          coordinates,
+        );
       default:
-        return this.squareButton.addShape(ShapeType.Square, id, color);
+        return this.squareButton.addShape(
+          ShapeType.Square,
+          id,
+          color,
+          coordinates,
+        );
     }
   }
-
 
   webViewContent(cssUri: vscode.Uri, shapes: Shape[]) {
     const html = getWebViewContent(cssUri, this.svgObject, shapes, {
@@ -85,7 +116,7 @@ import { objectAlias, ShapeType, ColorType, CommandType } from "./types";
       circleButton: this.circleButton,
       triangleButton: this.triangleButton,
       arrowButton: this.arrowButton,
-      trashButton: this.trashButton
+      trashButton: this.trashButton,
     });
     return html;
   }
@@ -93,14 +124,13 @@ import { objectAlias, ShapeType, ColorType, CommandType } from "./types";
   start() {
     console.log("Application started");
   }
-};
+}
 
 class ShapeManager {
   declare private listeners: (() => void)[];
 
   constructor() {
     this.listeners = [];
-
   }
 
   addListener(listener: () => void) {
@@ -108,11 +138,11 @@ class ShapeManager {
   }
 
   removeListener(listener: () => void) {
-    this.listeners = this.listeners.filter(l => l !== listener);
+    this.listeners = this.listeners.filter((l) => l !== listener);
   }
 
   notifyListeners() {
-    this.listeners.forEach(listener=> listener());
+    this.listeners.forEach((listener) => listener());
   }
 }
 
@@ -120,7 +150,7 @@ class Canvas {
   private shapes: Shape[];
   public shapeManager = new ShapeManager();
 
-  constructor (){
+  constructor() {
     this.shapes = [];
   }
 
@@ -152,6 +182,15 @@ class Canvas {
     this.shapeManager.notifyListeners();
   }
 
+  moveShape(id: number, x: number, y: number) {
+    this.shapes = this.shapes.map((s) => {
+      if (s.id === id) {
+        s.move(x, y);
+      }
+      return s;
+    });
+    this.shapeManager.notifyListeners();
+  }
 }
 
 // class Memento {}

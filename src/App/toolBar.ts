@@ -1,8 +1,6 @@
 import { Shape, Square, Triangle, Circle } from "./shape";
 import { ShapeType, ColorType } from "./types";
 
-
-
 abstract class ButtonFactory {
   constructor(
     public iconPath: string,
@@ -45,7 +43,12 @@ abstract class Button {
   ) {}
 
   abstract render(): string;
-  abstract addShape(type: string, id: number, color: ColorType): Shape;
+  abstract addShape(
+    type: string,
+    id: number,
+    color: ColorType,
+    coordinates: { x: number; y: number },
+  ): Shape;
 }
 
 class ShapeButton extends Button {
@@ -78,15 +81,20 @@ class ShapeButton extends Button {
     }
   }
 
-
-  addShape(type: string, id: number, color: ColorType): Shape {
+  addShape(
+    type: string,
+    id: number,
+    color: ColorType,
+    coordinates: { x: number; y: number },
+  ): Shape {
+    const { x, y } = coordinates;
     switch (type) {
       case ShapeType.Circle:
-        return new Circle(100, 100, id, color);
+        return new Circle(100, 100, x, y, id, color);
       case ShapeType.Triangle:
-        return new Triangle(100, 100, id, color);
+        return new Triangle(100, 100, x, y, id, color);
       default:
-        return new Square(100, 100, id, color);
+        return new Square(100, 100, x, y, id, color);
     }
   }
 }
@@ -108,15 +116,15 @@ class ToolButton extends Button {
                     id="button-arrow" class="mx-1 rounded-full flex items-center justify-center"><img src="${this.iconPath}" alt="${this.command}" style="width: 55%; height: 55%;"></button>`;
   }
 
-  addShape(type: string, id: number, color: ColorType): Shape {
-    return new Square(100, 100, id, color);
+  addShape(
+    type: string,
+    id: number,
+    color: ColorType,
+    coordinates: { x: number; y: number },
+  ): Shape {
+    const { x, y } = coordinates;
+    return new Square(100, 100, x, y, id, color);
   }
 }
 
-export {
-  ShapeButton,
-  ToolButton,
-  CreateShapeButton,
-  CreateToolButton,
-  Button,
-};
+export { ShapeButton, ToolButton, CreateShapeButton, CreateToolButton, Button };
