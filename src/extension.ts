@@ -91,7 +91,6 @@ export function activate(context: vscode.ExtensionContext) {
     app.canvas.shapeManager.addListener(updateWebView);
     // END OF START
 
-    // Handle incoming messages from webview
     panel.webview.onDidReceiveMessage((message) => {
       shapes = context.workspaceState.get("shapes") || []; 
 
@@ -150,7 +149,7 @@ export function activate(context: vscode.ExtensionContext) {
           }
           break;
         case "Move":
-          // vscode.window.showInformationMessage(`Shape moved: ${message.text}`);
+          vscode.window.showInformationMessage(`Shape moved: ${message.text}`);
           console.log("Moved by", message.translateX, message.translateY);
 
           const shapeToMove = app.canvas

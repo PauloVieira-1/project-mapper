@@ -146,6 +146,8 @@ function getWebViewContent(
         command: "Move",
         text: "Shape",
         id: parseInt(id),
+        positionX: lastX,
+        positionY: lastY,
         translateX: lastX,
         translateY: lastY,
       });
