@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Application } from "./App/application";
-import { ColorType } from "./App/types";
+import { ColorType, ShapeType } from "./App/types";
 
 // Simple ID generator using timestamp and random value to avoid collisions
 const idGenerator = (): number => {
@@ -73,18 +73,23 @@ export function activate(context: vscode.ExtensionContext) {
       shape: string;
       id: number;
       color: ColorType;
+      nextColor: ColorType;
       coordinates: { x: number; y: number };
     }[] = context.workspaceState.get("shapes") || [];
 
     app.setUpCanvas(
-      shapes.map(({ shape, id, color, coordinates }) =>
-        app.createShape(
-          shape,
+      shapes.map(({ shape, id, color, nextColor, coordinates }) => {
+        const resolvedNextColor = nextColor ?? getNextEnumValue(color);
+        const resolvedCoordinates = coordinates ?? { x: 0, y: 0 };
+        console.log(shape, id, color, resolvedNextColor, resolvedCoordinates);
+        return app.createShape(
+          shape as ShapeType,
           id,
           color,
-          coordinates ?? { x: 0, y: 0 } // fallback to default
-        )
-      )
+          resolvedNextColor,
+          resolvedCoordinates,
+        );
+      }),
     );
 
     const updateWebView = () => {
@@ -96,7 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
     // END OF START
 
     panel.webview.onDidReceiveMessage((message) => {
-      shapes = context.workspaceState.get("shapes") || []; 
+      shapes = context.workspaceState.get("shapes") || [];
 
       switch (message.command) {
         case "Add":
@@ -104,19 +109,28 @@ export function activate(context: vscode.ExtensionContext) {
           vscode.window.showInformationMessage(`Shape added: ${message.text}`);
 
           app.canvas.addShape(
-            app.createShape(message.text, shapeId, ColorType.DarkBlue, {
-              x: 0,
-              y: 0,
-            }),
+            app.createShape(
+              message.text,
+              shapeId,
+              ColorType.DarkBlue,
+              ColorType.Green,
+              {
+                x: 0,
+                y: 0,
+              },
+            ),
           );
 
           // Update persistent storage
-         const newShapes = [...shapes, {
-            shape: message.text,
-            id: shapeId,
-            color: ColorType.DarkBlue,
-            coordinates: { x: 0, y: 0 }  
-          }];
+          const newShapes = [
+            ...shapes,
+            {
+              shape: message.text,
+              id: shapeId,
+              color: ColorType.DarkBlue,
+              coordinates: { x: 0, y: 0 },
+            },
+          ];
           context.workspaceState.update("shapes", newShapes);
           break;
 
@@ -135,17 +149,24 @@ export function activate(context: vscode.ExtensionContext) {
           }
           break;
 
-        case "Color":
+        case "nextColor":
           const shapeToColor = app.canvas
             .getShapes()
             .find((shape) => shape.id === message.id);
           if (shapeToColor) {
             const newColor = getNextEnumValue(shapeToColor.color);
-            app.canvas.changeColor(shapeToColor.id, newColor);
+            const newNextColor = getNextEnumValue(newColor);
 
-            // Update color in state
+            app.canvas.changeColor(shapeToColor.id, newColor, newNextColor);
+
             const recoloredShapes = shapes.map((shape) =>
-              shape.id === message.id ? { ...shape, color: newColor } : shape,
+              shape.id === message.id
+                ? {
+                    ...shape,
+                    color: newColor,
+                    nextColor: newNextColor,
+                  }
+                : shape,
             );
             context.workspaceState.update("shapes", recoloredShapes);
           }

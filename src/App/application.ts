@@ -21,7 +21,6 @@ interface ExtendedWebViewContentOptions extends WebViewContentOptions {
   download: Button;
 }
 
-
 class Application {
   private svgObject: objectAlias;
   declare private squareButton: Button;
@@ -44,7 +43,10 @@ class Application {
   }
 
   setUpButtons() {
-    const createDropDownButtonShape = (svgObject: string, shape: string): Button => {
+    const createDropDownButtonShape = (
+      svgObject: string,
+      shape: string,
+    ): Button => {
       return new CreateShapeButton(
         svgObject,
         CommandType.fill,
@@ -79,7 +81,10 @@ class Application {
       null,
     ).createButton();
 
-    const createDropDownButton = (svgObject: string, command: string): Button => {
+    const createDropDownButton = (
+      svgObject: string,
+      command: string,
+    ): Button => {
       return new CreateShapeButton(
         svgObject,
         CommandType.fill,
@@ -88,15 +93,9 @@ class Application {
       ).createButton();
     };
 
-    this.undo = createDropDownButton(
-      this.svgObject.undo,
-      CommandType.undo,
-    );
+    this.undo = createDropDownButton(this.svgObject.undo, CommandType.undo);
 
-    this.redo = createDropDownButton(
-      this.svgObject.redo,
-      CommandType.redo,
-    );
+    this.redo = createDropDownButton(this.svgObject.redo, CommandType.redo);
 
     this.download = createDropDownButton(
       this.svgObject.download,
@@ -118,55 +117,53 @@ class Application {
   }
 
   createShape(
-    buttonName: string,
+    shapeType: ShapeType,
     id: number,
     color: ColorType,
+    nextColor: ColorType,
     coordinates: { x: number; y: number },
   ): Shape {
-    switch (buttonName) {
+    const { x, y } = coordinates;
+
+    switch (shapeType) {
       case ShapeType.Circle:
-        return this.circleButton.addShape(
-          ShapeType.Circle,
-          id,
-          color,
-          coordinates,
-        );
+        return this.circleButton.addShape(shapeType, id, color, nextColor, {
+          x,
+          y,
+        });
       case ShapeType.Triangle:
-        return this.triangleButton.addShape(
-          ShapeType.Triangle,
-          id,
-          color,
-          coordinates,
-        );
+        return this.triangleButton.addShape(shapeType, id, color, nextColor, {
+          x,
+          y,
+        });
       case ShapeType.Arrow:
-        return this.arrowButton.addShape(
-          ShapeType.Arrow,
-          id,
-          color,
-          coordinates,
-        );
+        return this.arrowButton.addShape(shapeType, id, color, nextColor, {
+          x,
+          y,
+        });
       default:
         return this.squareButton.addShape(
           ShapeType.Square,
           id,
           color,
-          coordinates,
+          nextColor,
+          { x, y },
         );
     }
   }
 
   webViewContent(cssUri: vscode.Uri, shapes: Shape[]) {
-  return getWebViewContent(cssUri, this.svgObject, shapes, {
-    squareButton: this.squareButton,
-    circleButton: this.circleButton,
-    triangleButton: this.triangleButton,
-    arrowButton: this.arrowButton,
-    trashButton: this.trashButton,
-    undo: this.undo,
-    redo: this.redo,
-    download: this.download,
-  } as WebViewContentOptions & ExtendedWebViewContentOptions);
-}
+    return getWebViewContent(cssUri, this.svgObject, shapes, {
+      squareButton: this.squareButton,
+      circleButton: this.circleButton,
+      triangleButton: this.triangleButton,
+      arrowButton: this.arrowButton,
+      trashButton: this.trashButton,
+      undo: this.undo,
+      redo: this.redo,
+      download: this.download,
+    } as WebViewContentOptions & ExtendedWebViewContentOptions);
+  }
 
   start() {
     console.log("Application started");
@@ -219,10 +216,10 @@ class Canvas {
     this.shapeManager.notifyListeners();
   }
 
-  changeColor(id: number, color: ColorType) {
+  changeColor(id: number, color: ColorType, nextColor: ColorType) {
     this.shapes = this.shapes.map((s) => {
       if (s.id === id) {
-        s.setColor(color);
+        s.setColor(color, nextColor);
       }
       return s;
     });

@@ -5,8 +5,9 @@ interface Shape {
   width: number;
   id: number;
   color: ColorType;
+  nextColor: ColorType;
   render(): string;
-  setColor(color: ColorType): void;
+  setColor(color: ColorType, nextColor: ColorType): void;
   move(x: number, y: number): void;
 }
 
@@ -17,7 +18,8 @@ class Square implements Shape {
     public x: number,
     public y: number,
     public id: number,
-    public color: ColorType
+    public color: ColorType,
+    public nextColor: ColorType,
   ) {}
 
   render() {
@@ -33,8 +35,25 @@ class Square implements Shape {
                position:relative;
                z-index: 2;
              "
-             onmousedown="startDrag(event, ${this.id})"
-             onclick="vscode.postMessage({command: 'color', text: 'Square', id: ${this.id}})">
+             onmousedown="startDrag(event, ${this.id})">
+             
+             <div
+               class="next-color-indicator"
+               onclick="event.stopPropagation(); vscode.postMessage({command: 'nextColor', id: ${this.id}})"
+               style="
+                 width: 12px;
+                 height: 12px;
+                 background: ${this.nextColor};
+                 border: 1px solid #333;
+                 border-radius: 50%;
+                 position: absolute;
+                 top: 4px;
+                 left: 4px;
+                 z-index: 3;
+                 cursor: pointer;
+               "
+             ></div>
+
         </div>
         <div class="delete-button"
              onclick="event.stopPropagation(); vscode.postMessage({command: 'Remove', text: 'Square', id: ${this.id}})">
@@ -44,8 +63,9 @@ class Square implements Shape {
     `;
   }
 
-  setColor(color: ColorType) {
+  setColor(color: ColorType, nextColor: ColorType) {
     this.color = color;
+    this.nextColor = nextColor;
   }
 
   move(x: number, y: number) {
@@ -61,7 +81,8 @@ class Triangle implements Shape {
     public x: number,
     public y: number,
     public id: number,
-    public color: ColorType
+    public color: ColorType,
+    public nextColor: ColorType,
   ) {}
 
   render() {
@@ -79,8 +100,26 @@ class Triangle implements Shape {
                z-index: 2;
              "
              onmousedown="startDrag(event, ${this.id})"
-             onclick="vscode.postMessage({command: 'color', text: 'Triangle', id: ${this.id}})">
+             >
         </div>
+
+        <div
+          class="next-color-indicator"
+          onclick="event.stopPropagation(); vscode.postMessage({command: 'nextColor', id: ${this.id}})"
+          style="
+            width: 12px;
+            height: 12px;
+            background: ${this.nextColor};
+            border: 1px solid #333;
+            border-radius: 50%;
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            z-index: 3;
+            cursor: pointer;
+          "
+        ></div>
+
         <div class="delete-button"
              onclick="event.stopPropagation(); vscode.postMessage({command: 'Remove', text: 'Triangle', id: ${this.id}})">
           ×
@@ -89,8 +128,9 @@ class Triangle implements Shape {
     `;
   }
 
-  setColor(color: ColorType) {
+  setColor(color: ColorType, nextColor: ColorType) {
     this.color = color;
+    this.nextColor = nextColor;
   }
 
   move(x: number, y: number) {
@@ -106,7 +146,8 @@ class Circle implements Shape {
     public x: number,
     public y: number,
     public id: number,
-    public color: ColorType
+    public color: ColorType,
+    public nextColor: ColorType,
   ) {}
 
   render() {
@@ -123,8 +164,26 @@ class Circle implements Shape {
                z-index: 2;
              "
              onmousedown="startDrag(event, ${this.id})"
-             onclick="vscode.postMessage({command: 'color', text: 'Circle', id: ${this.id}})">
+             >
         </div>
+
+        <div
+          class="next-color-indicator"
+          onclick="event.stopPropagation(); vscode.postMessage({command: 'nextColor', id: ${this.id}})"
+          style="
+            width: 12px;
+            height: 12px;
+            background: ${this.nextColor};
+            border: 1px solid #333;
+            border-radius: 50%;
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            z-index: 3;
+            cursor: pointer;
+          "
+        ></div>
+
         <div class="delete-button"
              onclick="event.stopPropagation(); vscode.postMessage({command: 'Remove', text: 'Circle', id: ${this.id}})">
           ×
@@ -133,8 +192,9 @@ class Circle implements Shape {
     `;
   }
 
-  setColor(color: ColorType) {
+  setColor(color: ColorType, nextColor: ColorType) {
     this.color = color;
+    this.nextColor = nextColor;
   }
 
   move(x: number, y: number) {
