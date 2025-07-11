@@ -2,34 +2,36 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { Application } from "./App/application";
 import { ColorType, ShapeType } from "./App/types";
+import { idGenerator, getNextEnumValue } from "./App/helpers";
 
-// Simple ID generator using timestamp and random value to avoid collisions
-const idGenerator = (): number => {
-  return Date.now() + Math.floor(Math.random() * 1000);
-};
-
+/**
+ * Called when the extension is activated.
+ *
+ * Sets up the application with the current state of the shapes, and
+ * registers a command to launch the webview.
+ *
+ * @param context The extension context.
+ */
 export function activate(context: vscode.ExtensionContext) {
-  // Helper to resolve file paths within the extension
   const resourceUri = (relativePath: string) => {
     return vscode.Uri.file(path.join(context.extensionPath, relativePath));
   };
 
-  // Resolves a URI to a Webview-safe URI
+  /**
+   * Creates a URI that can be used in the webview to refer to a file
+   * in the extension's directory.
+   *
+   * @param panel The webview panel.
+   * @param relativePath The path to the file within the extension's
+   *                     directory.
+   * @returns The URI.
+   */
   const webViewUri = (panel: vscode.WebviewPanel, relativePath: string) => {
     return panel.webview.asWebviewUri(
       vscode.Uri.file(path.join(context.extensionPath, relativePath)),
     );
   };
 
-  // Cycles through enum values
-  function getNextEnumValue(current: ColorType): ColorType {
-    const values = Object.values(ColorType) as ColorType[];
-    const index = values.indexOf(current);
-    const nextIndex = (index + 1) % values.length;
-    return values[nextIndex];
-  }
-
-  // Register the 'launch' command
   const open = vscode.commands.registerCommand("projectmapper.launch", () => {
     const panel = vscode.window.createWebviewPanel(
       "projectMapper",
@@ -98,6 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     updateWebView();
     app.canvas.shapeManager.addListener(updateWebView);
+
     // END OF START
 
     panel.webview.onDidReceiveMessage((message) => {
@@ -121,7 +124,6 @@ export function activate(context: vscode.ExtensionContext) {
             ),
           );
 
-          // Update persistent storage
           const newShapes = [
             ...shapes,
             {
@@ -141,7 +143,6 @@ export function activate(context: vscode.ExtensionContext) {
           if (shapeToRemove) {
             app.canvas.removeShape(shapeToRemove.id);
 
-            // Remove from state and update
             const updatedShapes = shapes.filter(
               (shape) => shape.id !== message.id,
             );
@@ -200,7 +201,6 @@ export function activate(context: vscode.ExtensionContext) {
 
           break;
         case "Clear":
-          // Clear all shapes from canvas and state
           context.workspaceState.update("shapes", []);
           app.setUpCanvas([]);
           console.log("WORKPLACE CLEARED");
