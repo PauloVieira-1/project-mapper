@@ -8,9 +8,9 @@
   background-size: 200px 200px;
 }
 
- #canvas {
+#canvas {
   background-color: #323232;
-  border-color:  #323232;
+  border-color: #323232;
   height: 100%;
   width: 100%;
   background-repeat: repeat;
@@ -32,24 +32,22 @@
   background-color: #0098ff;
   height: 5vh;
   width: 5vh;
+}
 
-  &:hover {
-    background-color: #0065a9;
-    transition: background-color 0.2s ease;
-  }
+.button-add:hover {
+  background-color: #0065a9;
+  transition: background-color 0.2s ease;
 }
 
 #button-arrow {
-  border:
-    #0098ff,
-    2px solid;
+  border: #0098ff 2px solid;
   height: 5vh;
   width: 5vh;
+}
 
-  &:hover {
-    background-color: #0098ff;
-    transition: background-color 0.2s ease;
-  }
+#button-arrow:hover {
+  background-color: #0098ff;
+  transition: background-color 0.2s ease;
 }
 
 .dropbtn {
@@ -116,49 +114,76 @@
 .shape-group {
   position: absolute;
   user-select: none;
-  z-index: 1; /* base level */
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.shape-group > div:first-child {
+.shape-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.shape {
   position: relative;
-  z-index: 2; /* the shape itself */
   cursor: grab;
+  z-index: 2;
+  border-radius: 5px;
 }
 
-.delete-button {
+.triangle {
+  width: 0;
+  height: 0;
+  position: relative;
+  cursor: grab;
+  z-index: 2;
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+.next-color-indicator {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #333;
+  border-radius: 50%;
   position: absolute;
+  z-index: 3;
+  cursor: pointer;
+  top: 4px;
+  left: 4px;
+}
+
+/* 🔽 Hide delete button by default */
+.delete-button {
+  display: none;
+  position: absolute;
+  top: -8px;
+  right: -8px;
   width: 16px;
   height: 16px;
-  background: #de4e4e; /* your preferred red */
+  background: #de4e4e;
   border-radius: 50%;
   color: white;
   font-weight: bold;
   font-size: 12px;
-  display: flex;
   align-items: center;
   justify-content: center;
-
-  opacity: 0;
-  pointer-events: none;
-
-  transition: opacity 0.2s ease-in-out, background 0.2s;
+  transition: background 0.2s ease;
   user-select: none;
   z-index: 5;
-
-  /* Position just outside the shape's right-top corner */
-  left: calc(100% + 5px);
-  top: -5px;
   cursor: pointer;
+;
 }
 
+/* 🔽 Show delete button when hovering over shape-group */
 .shape-group:hover .delete-button {
-  opacity: 1;
-  pointer-events: auto;
+  display: flex;
 }
 
 .delete-button:hover {
-  background: #a53a3a; /* darker red on hover */
+  background: #a53a3a;
 }
-
-
-
