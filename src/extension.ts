@@ -55,6 +55,10 @@ export function activate(context: vscode.ExtensionContext) {
       "triangle",
       "circle",
       "trash",
+      "list",
+      "redo",
+      "undo",
+      "download",
     ].reduce(
       (list, item) => {
         list[item] = webViewUri(panel, `src/icons/${item}.svg`).toString();
@@ -117,7 +121,6 @@ export function activate(context: vscode.ExtensionContext) {
           break;
 
         case "Remove":
-          console.log("REMOVED");
           const shapeToRemove = app.canvas
             .getShapes()
             .find((shape) => shape.id === message.id);
@@ -133,7 +136,6 @@ export function activate(context: vscode.ExtensionContext) {
           break;
 
         case "Color":
-          console.log("COLOR CHANGED");
           const shapeToColor = app.canvas
             .getShapes()
             .find((shape) => shape.id === message.id);
@@ -149,9 +151,6 @@ export function activate(context: vscode.ExtensionContext) {
           }
           break;
         case "Move":
-          vscode.window.showInformationMessage(`Shape moved: ${message.text}`);
-          console.log("Moved by", message.translateX, message.translateY);
-
           const shapeToMove = app.canvas
             .getShapes()
             .find((shape) => shape.id === message.id);

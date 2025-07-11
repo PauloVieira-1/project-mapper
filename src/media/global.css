@@ -8,20 +8,24 @@
   background-size: 200px 200px;
 }
 
- #svgCanvas {
+ #canvas {
   background-color: #323232;
-  border-color:  #323232;;
+  border-color:  #323232;
   height: 100%;
   width: 100%;
   background-repeat: repeat;
   background-position: center;
   background-size: 200px 200px;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
 }
 
 #button-menu {
   background-color: #4e4e4e;
   height: 7vh;
   width: 27vw;
+  z-index: 100;
 }
 
 .button-add {
@@ -109,58 +113,51 @@
   background-color: #0065a9;
 }
 
-
-/* svg rect, svg circle, svg line, svg polygon{
-  fill: #0098ff;
-} */
-
-svg:hover .close{
-  display: block;
-  fill: #ff0000;
+.shape-group {
+  position: absolute;
+  user-select: none;
+  z-index: 1; /* base level */
 }
 
-/* svg rect:hover, svg circle:hover, svg line:hover, svg polygon:hover{
-  fill: #0065a9;
-} */
-
-.hidden-svg {
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  fill: #de4e4e !important;
-  pointer-events: none; /* Prevents interaction when invisible */
-}
-
-.hover-target {
+.shape-group > div:first-child {
   position: relative;
-  display: inline-block;
+  z-index: 2; /* the shape itself */
+  cursor: grab;
+}
+
+.delete-button {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #de4e4e; /* your preferred red */
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity 0.2s ease-in-out, background 0.2s;
+  user-select: none;
+  z-index: 5;
+
+  /* Position just outside the shape's right-top corner */
+  left: calc(100% + 5px);
+  top: -5px;
   cursor: pointer;
 }
 
-.hover-target:hover .hidden-svg {
+.shape-group:hover .delete-button {
   opacity: 1;
-  pointer-events: all; /* Restores interaction on hover */
+  pointer-events: auto;
 }
 
-.hidden-svg circle {
-  fill: #de4e4e !important;
-}
-
-.hidden-svg:hover circle {
-  fill: #a53a3a !important;
-}
-
-.hidden-svg line {
-  stroke: white;
-  stroke-width: 2;
-}
-
-.hidden-svg:hover line {
-  stroke: #f5f5f5; /* Slightly lighter on hover */
-}
-
-#shape {
-  cursor: pointer;
-  /* position: fixed; */
+.delete-button:hover {
+  background: #a53a3a; /* darker red on hover */
 }
 
 

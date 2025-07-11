@@ -1,5 +1,5 @@
 import { Shape, Square, Triangle, Circle } from "./shape";
-import { ShapeType, ColorType } from "./types";
+import { ShapeType, ColorType, CommandType } from "./types";
 
 abstract class ButtonFactory {
   constructor(
@@ -63,7 +63,7 @@ class ShapeButton extends Button {
 
   render() {
     switch (this.functionType) {
-      case "fill":
+      case CommandType.fill:
         return `
                 <a href="#" onclick="vscode.postMessage({
                         command: '${this.command}',
@@ -71,7 +71,7 @@ class ShapeButton extends Button {
                     })">
                 <div class="grid grid-cols-6 items-center">
                 <img class="col-span-1 ps-0" src="${this.iconPath}" alt="${this.command}" style="width: 80%; height: 80%;">
-                <span class="col-span-4 pl-2 pr-0 font-semibold">${this.command} ${this.text}</span>
+                <span class="col-span-4 pl-2 pr-0 font-semibold">${this?.command} ${this.text ?? ""}</span>
                 </div>
                  </a>`;
       case "outline":

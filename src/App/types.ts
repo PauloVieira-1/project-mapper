@@ -18,7 +18,10 @@ enum ColorType {
 enum CommandType {
   AddShape = "Add",
   Clear = "Clear",
-  fill = "fill",
+  fill = "Fill",
+  undo = "Undo",
+  redo = "Redo",
+  download = "Download",
 }
 
 export { ShapeType, objectAlias, ColorType, CommandType };
