@@ -69,7 +69,7 @@ class ShapeButton extends Button {
                 <a href="#" onclick="vscode.postMessage({
                         command: '${this.command}',
                         text : '${this.text}'
-                    })">
+                    }); vscode.postMessage({command: 'saveState'})">
                 <div class="grid grid-cols-6 items-center">
                 <img class="col-span-1 ps-0" src="${this.iconPath}" alt="${this.command}" style="width: 80%; height: 80%;">
                 <span class="col-span-4 pl-2 pr-0 font-semibold">${this?.command} ${this.text ?? ""}</span>

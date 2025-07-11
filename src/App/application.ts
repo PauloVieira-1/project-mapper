@@ -32,6 +32,7 @@ class Application {
   declare private undo: Button;
   declare private download: Button;
   public canvas = new Canvas();
+  public caretaker = new Caretaker();
 
   constructor(resources: objectAlias, panel: vscode.WebviewPanel) {
     this.svgObject = resources;
@@ -121,34 +122,17 @@ class Application {
     id: number,
     color: ColorType,
     nextColor: ColorType,
-    coordinates: { x: number; y: number },
+    { x, y }: { x: number; y: number },
   ): Shape {
-    const { x, y } = coordinates;
-
     switch (shapeType) {
       case ShapeType.Circle:
-        return this.circleButton.addShape(shapeType, id, color, nextColor, {
-          x,
-          y,
-        });
+        return this.circleButton.addShape(shapeType, id, color, nextColor, { x, y });
       case ShapeType.Triangle:
-        return this.triangleButton.addShape(shapeType, id, color, nextColor, {
-          x,
-          y,
-        });
+        return this.triangleButton.addShape(shapeType, id, color, nextColor, { x, y });
       case ShapeType.Arrow:
-        return this.arrowButton.addShape(shapeType, id, color, nextColor, {
-          x,
-          y,
-        });
+        return this.arrowButton.addShape(shapeType, id, color, nextColor, { x, y });
       default:
-        return this.squareButton.addShape(
-          ShapeType.Square,
-          id,
-          color,
-          nextColor,
-          { x, y },
-        );
+        return this.squareButton.addShape(ShapeType.Square, id, color, nextColor, { x, y });
     }
   }
 
@@ -165,9 +149,14 @@ class Application {
     } as WebViewContentOptions & ExtendedWebViewContentOptions);
   }
 
-  start() {
-    console.log("Application started");
+  createSnapshot(){
+    return new Snapshot(this.canvas.getShapes());
   }
+
+  saveState(){
+    this.caretaker.add(this.createSnapshot());
+  }
+
 }
 
 class ShapeManager {
@@ -237,6 +226,52 @@ class Canvas {
   }
 }
 
-// class Memento {}
+class Snapshot {
+  private shapes: Shape[];
+
+  constructor(shapes: Shape[]) {
+    this.shapes = shapes.map((s) => s.clone()); 
+  }
+
+  restore(canvas: Canvas) {
+    canvas.setShapes(this.shapes.map((s) => s.clone())); 
+  }
+
+  getShapes(): Shape[] {
+    return this.shapes.map((s) => s.clone()); 
+  }
+}
+
+
+class Caretaker {
+  private snapshots: Snapshot[] = [];
+
+  add(snapshot: Snapshot) {
+    this.snapshots.push(snapshot);
+  }
+
+  undo(canvas: Canvas) {
+    if (this.snapshots.length > 0) {
+      const snapshot = this.snapshots.pop();
+      if (snapshot) {
+        snapshot.restore(canvas);
+      }
+    }
+  }
+
+  redo(canvas: Canvas) {
+    if (this.snapshots.length > 0) {
+      const snapshot = this.snapshots.pop();
+      if (snapshot) {
+        canvas.setShapes(snapshot.getShapes());
+      }
+    }
+  }
+
+  getSnapshots(){
+    return [...this.snapshots];
+  }
+}
+
 
 export { Application };

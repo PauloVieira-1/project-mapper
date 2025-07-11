@@ -200,10 +200,21 @@ export function activate(context: vscode.ExtensionContext) {
           }
 
           break;
+        case "saveState":
+          app.saveState();
+          break;
         case "Clear":
           context.workspaceState.update("shapes", []);
           app.setUpCanvas([]);
           console.log("WORKPLACE CLEARED");
+          break;
+        case "Undo":
+          app.caretaker.undo(app.canvas);
+          break;
+        case "Redo":
+          app.caretaker.redo(app.canvas);
+          break;
+        default:
           break;
       }
     });

@@ -9,6 +9,7 @@ interface Shape {
   render(): string;
   setColor(color: ColorType, nextColor: ColorType): void;
   move(x: number, y: number): void;
+  clone(): Shape;
 }
 
 class Square implements Shape {
@@ -45,6 +46,10 @@ class Square implements Shape {
   move(x: number, y: number) {
     this.x = x;
     this.y = y;
+  }
+
+  clone(): Shape {
+    return new Square(this.length, this.width, this.x, this.y, this.id, this.color, this.nextColor);
   }
 }
 
@@ -83,6 +88,10 @@ class Triangle implements Shape {
     this.x = x;
     this.y = y;
   }
+
+  clone(): Shape {
+    return new Triangle(this.length, this.width, this.x, this.y, this.id, this.color, this.nextColor);
+  }
 }
 
 class Circle implements Shape {
@@ -119,6 +128,10 @@ class Circle implements Shape {
   move(x: number, y: number) {
     this.x = x;
     this.y = y;
+  }
+
+  clone(): Shape {
+    return new Circle(this.length, this.width, this.x, this.y, this.id, this.color, this.nextColor);
   }
 }
 
