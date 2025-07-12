@@ -155,33 +155,41 @@
   cursor: pointer;
   top: 4px;
   left: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+  z-index: 10;
+  display: none;
 }
 
-/* 🔽 Hide delete button by default */
+.shape:hover .next-color-indicator {
+  display: block;
+}
+
 .delete-button {
-  display: none;
   position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 16px;
-  height: 16px;
+  top: -14px; 
+  right: -12px;
   background: #de4e4e;
-  border-radius: 50%;
   color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 14px;
   font-weight: bold;
-  font-size: 12px;
+  display: none;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s ease;
-  user-select: none;
-  z-index: 5;
   cursor: pointer;
-;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  line-height: 1; 
+  padding: 0;
+  transition: display 0.5s ease-in-out;
 }
 
-/* 🔽 Show delete button when hovering over shape-group */
 .shape-group:hover .delete-button {
   display: flex;
+  transition: display 0.5s ease-in-out;
 }
 
 .delete-button:hover {

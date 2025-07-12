@@ -114,7 +114,7 @@ class Circle implements Shape {
                onmousedown="startDrag(event, ${this.id})">
             <div class="next-color-indicator" onclick="event.stopPropagation(); vscode.postMessage({command: 'nextColor', id: ${this.id}}); vscode.postMessage({command: 'saveState'})" style="background: ${this.nextColor}; top: -8px; left: -8px;"></div>
           </div>
-          <div class="delete-button" onclick="event.stopPropagation(); vscode.postMessage({command: 'Remove', text: 'Circle', id: ${this.id}}); vscode.postMessage({command: 'saveState'})">×</div>
+          <div class="delete-button" style={{}} onclick="event.stopPropagation(); vscode.postMessage({command: 'Remove', text: 'Circle', id: ${this.id}}); vscode.postMessage({command: 'saveState'})">×</div>
         </div>
       </div>
     `;
