@@ -1,5 +1,6 @@
 
-import { ColorType } from "./types";
+import { Shape } from "./shape";
+import { ColorType, CommandType, ShapeType } from "./types";
 
 /**
  * Generates a unique identifier.
@@ -33,4 +34,18 @@ export const idGenerator = (): number => {
   };
 
 
-
+/**
+ * Checks if a given object conforms to the expected shape
+ * of a message.
+ *
+ * A valid message must have a `command` property with a
+ * value that is a string and a member of the `CommandType`
+ * enum.
+ *
+ * @param msg The object to check.
+ * @returns `true` if `msg` is a valid message, `false`
+ * otherwise.
+ */
+export function isShapeMessage(msg: any) {
+  return typeof msg.command === "string" && Object.values(CommandType).includes(msg.command);
+}

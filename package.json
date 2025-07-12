@@ -70,6 +70,7 @@
     "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx, css,scss, html, json}\""
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.9",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
     "@types/vscode": "^1.97.0",
@@ -79,16 +80,18 @@
     "@vscode/test-electron": "^2.4.1",
     "css-loader": "^7.1.2",
     "eslint": "^9.19.0",
+    "prettier": "^3.5.3",
     "source-map-loader": "^5.0.0",
     "style-loader": "^4.0.0",
     "svg-inline-loader": "^0.8.2",
     "ts-loader": "^9.5.2",
     "typescript": "^5.7.3",
     "webpack": "^5.97.1",
-    "webpack-cli": "^6.0.1",
-    "prettier": "^3.5.3"
+    "webpack-cli": "^6.0.1"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
+    "lodash.debounce": "^4.0.8",
     "vscode": "^1.1.37"
   }
 }

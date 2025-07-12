@@ -1,8 +1,9 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Application } from "./App/application";
-import { ColorType, ShapeType } from "./App/types";
-import { idGenerator, getNextEnumValue } from "./App/helpers";
+import { ColorType, ShapeType, CommandType, svgResources, ShapeData } from "./App/types";
+import { idGenerator, getNextEnumValue, isShapeMessage } from "./App/helpers";
+import debounce from "lodash.debounce";
 
 /**
  * Called when the extension is activated.
@@ -32,6 +33,16 @@ export function activate(context: vscode.ExtensionContext) {
     );
   };
 
+  const updateShapes = debounce((shapes: ShapeData[]) => {
+    try {
+      context.workspaceState.update("shapes", shapes);
+    } catch (e) {
+      console.error(e);
+      vscode.window.showErrorMessage(
+        "An error occurred while saving shapes. Please try again.");
+    }
+  }, 500);
+
   const open = vscode.commands.registerCommand("projectmapper.launch", () => {
     const panel = vscode.window.createWebviewPanel(
       "projectMapper",
@@ -50,18 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     const cssUri = webViewUri(panel, "src/media/global.css");
 
-    const svgResources = [
-      "plus",
-      "arrow",
-      "square",
-      "triangle",
-      "circle",
-      "trash",
-      "list",
-      "redo",
-      "undo",
-      "download",
-    ].reduce(
+    const svgObject = svgResources.reduce(
       (list, item) => {
         list[item] = webViewUri(panel, `src/icons/${item}.svg`).toString();
         return list;
@@ -70,14 +70,8 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     // START: Setup application and restore saved shapes
-    const app = new Application(svgResources, panel);
-    let shapes: {
-      shape: string;
-      id: number;
-      color: ColorType;
-      nextColor: ColorType;
-      coordinates: { x: number; y: number };
-    }[] = context.workspaceState.get("shapes") || [];
+    const app = new Application(svgObject, panel);
+    let shapes: ShapeData[] = context.workspaceState.get<ShapeData[]>("shapes") || [];
 
     app.setUpCanvas(
       shapes.map(({ shape, id, color, nextColor, coordinates }) => {
@@ -106,10 +100,15 @@ export function activate(context: vscode.ExtensionContext) {
     panel.webview.onDidReceiveMessage((message) => {
       shapes = context.workspaceState.get("shapes") || [];
 
+      if (!isShapeMessage(message)) {
+        vscode.window.showErrorMessage("Invalid message received");
+        return;
+      }
+
+      // ===== Shape Lifecycle =====
       switch (message.command) {
-        case "Add":
+        case CommandType.AddShape:
           const shapeId = idGenerator();
-          vscode.window.showInformationMessage(`Shape added: ${message.text}`);
 
           app.canvas.addShape(
             app.createShape(
@@ -130,13 +129,14 @@ export function activate(context: vscode.ExtensionContext) {
               shape: message.text,
               id: shapeId,
               color: ColorType.DarkBlue,
+              nextColor: ColorType.Green,
               coordinates: { x: 0, y: 0 },
             },
           ];
-          context.workspaceState.update("shapes", newShapes);
+          updateShapes(newShapes);
           break;
 
-        case "Remove":
+        case CommandType.RemoveShape:
           const shapeToRemove = app.canvas
             .getShapes()
             .find((shape) => shape.id === message.id);
@@ -146,11 +146,12 @@ export function activate(context: vscode.ExtensionContext) {
             const updatedShapes = shapes.filter(
               (shape) => shape.id !== message.id,
             );
-            context.workspaceState.update("shapes", updatedShapes);
+            updateShapes(updatedShapes);
           }
           break;
 
-        case "nextColor":
+        // ===== Shape Appearance =====
+        case CommandType.ChangeColor:
           const shapeToColor = app.canvas
             .getShapes()
             .find((shape) => shape.id === message.id);
@@ -169,10 +170,12 @@ export function activate(context: vscode.ExtensionContext) {
                   }
                 : shape,
             );
-            context.workspaceState.update("shapes", recoloredShapes);
+            updateShapes(recoloredShapes);
           }
           break;
-        case "Move":
+        
+        // ===== Shape Actions =====
+        case CommandType.MoveShape:
           const shapeToMove = app.canvas
             .getShapes()
             .find((shape) => shape.id === message.id);
@@ -196,22 +199,21 @@ export function activate(context: vscode.ExtensionContext) {
                 : shape,
             );
 
-            context.workspaceState.update("shapes", updatedShapes);
+            updateShapes(updatedShapes);
           }
 
           break;
-        case "saveState":
+        case CommandType.saveState:
           app.saveState();
           break;
-        case "Clear":
-          context.workspaceState.update("shapes", []);
+        case CommandType.Clear:
+          updateShapes([]);
           app.setUpCanvas([]);
-          console.log("WORKPLACE CLEARED");
           break;
-        case "Undo":
+        case CommandType.undo:
           app.caretaker.undo(app.canvas);
           break;
-        case "Redo":
+        case CommandType.redo:
           app.caretaker.redo(app.canvas);
           break;
         default:

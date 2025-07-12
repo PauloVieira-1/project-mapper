@@ -17,6 +17,10 @@ enum ColorType {
 
 enum CommandType {
   AddShape = "Add",
+  RemoveShape = "Remove",
+  MoveShape = "Move",
+  ChangeColor = "nextColor",
+  saveState = "saveState",
   Clear = "Clear",
   fill = "Fill",
   undo = "Undo",
@@ -24,4 +28,25 @@ enum CommandType {
   download = "Download",
 }
 
-export { ShapeType, objectAlias, ColorType, CommandType };
+const svgResources = [
+      "plus",
+      "arrow",
+      "square",
+      "triangle",
+      "circle",
+      "trash",
+      "list",
+      "redo",
+      "undo",
+      "download",
+    ];
+
+interface ShapeData {
+  shape: ShapeType;
+  id: number;
+  color: ColorType;
+  nextColor: ColorType;
+  coordinates: { x: number; y: number };
+}
+
+export { ShapeType, objectAlias, ColorType, CommandType, svgResources, ShapeData };
