@@ -42,6 +42,16 @@ function getWebViewContent(
           href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
         />
         <link rel="stylesheet" type="text/css" href="${cssUri}" />
+        <style>
+          .resize-handle {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            cursor: se-resize;
+          }
+        </style>
       </head>
 
       <body>
@@ -145,19 +155,16 @@ function getWebViewContent(
 
           function endDrag() {
             if (dragging && currentShape) {
-              const id = currentShape.id.split("-")[2]; // shape-group-<id>
-
-              const positionX = lastX;
-              const positionY = lastY;
+              const id = currentShape.id.split("-")[2];
 
               vscode.postMessage({
                 command: "Move",
                 text: "Shape",
                 id: parseInt(id),
-                positionX,
-                positionY,
-                translateX: positionX,
-                translateY: positionY,
+                positionX: lastX,
+                positionY: lastY,
+                translateX: lastX,
+                translateY: lastY,
               });
             }
 
@@ -165,6 +172,68 @@ function getWebViewContent(
             currentShape = null;
             document.removeEventListener("mousemove", onDrag);
             document.removeEventListener("mouseup", endDrag);
+          }
+
+          let resizing = false;
+          let currentShapeId = null;
+          let resizeDirection = null;
+
+          function startResize(event, shapeId, direction) {
+            event.stopPropagation();
+            resizing = true;
+            currentShapeId = shapeId;
+            resizeDirection = direction;
+            document.addEventListener("mousemove", onResize);
+            document.addEventListener("mouseup", stopResize);
+          }
+
+          function onResize(event) {
+            event.stopPropagation();
+            if (!resizing || !currentShapeId || !resizeDirection) return;
+
+            const canvas = document.getElementById("canvas");
+            const canvasRect = canvas.getBoundingClientRect();
+
+            const mouseX = event.clientX - canvasRect.left;
+            const mouseY = event.clientY - canvasRect.top;
+
+            const shape = document.getElementById("shape-group-" + currentShapeId);
+            if (!shape) return;
+
+            const currentLeft = shape.offsetLeft;
+            const currentTop = shape.offsetTop;
+            const currentWidth = shape.offsetWidth;
+            const currentHeight = shape.offsetHeight;
+
+            let newWidth = currentWidth;
+            let newHeight = currentHeight;
+
+            if (resizeDirection === "right") {
+              newWidth = Math.max(20, mouseX - currentLeft);
+            } else if (resizeDirection === "bottom") {
+              newHeight = Math.max(20, mouseY - currentTop);
+            } else if (resizeDirection === "corner") {
+              newWidth = Math.max(20, mouseX - currentLeft);
+              newHeight = Math.max(20, mouseY - currentTop);
+            }
+
+            shape.style.width = newWidth + "px";
+            shape.style.height = newHeight + "px";
+
+            vscode.postMessage({
+              command: "Resize",
+              id: parseInt(currentShapeId),
+              width: newWidth,
+              height: newHeight,
+            });
+          }
+
+          function stopResize() {
+            resizing = false;
+            currentShapeId = null;
+            resizeDirection = null;
+            document.removeEventListener("mousemove", onResize);
+            document.removeEventListener("mouseup", stopResize);
           }
         </script>
       </body>

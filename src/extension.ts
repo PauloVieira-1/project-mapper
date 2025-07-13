@@ -74,14 +74,17 @@ export function activate(context: vscode.ExtensionContext) {
     let shapes: ShapeData[] = context.workspaceState.get<ShapeData[]>("shapes") || [];
 
     app.setUpCanvas(
-      shapes.map(({ shape, id, color, nextColor, coordinates }) => {
+      shapes.map(({ shape, id, color, nextColor, coordinates, dimensions }) => {
         const resolvedNextColor = nextColor ?? getNextEnumValue(color);
+        const resolvedCoordinates = coordinates ?? { x: 0, y: 0 };
+        const resolvedDimensions = dimensions ?? { length: 100, width: 100 };
         return app.createShape(
           shape as ShapeType,
           id,
           color,
           resolvedNextColor,
-          coordinates,
+          resolvedCoordinates,
+          resolvedDimensions,
         );
       }),
     );
@@ -118,6 +121,10 @@ export function activate(context: vscode.ExtensionContext) {
                 x: 0,
                 y: 0,
               },
+              {
+                length: 100,
+                width: 100,
+              },
             ),
           );
 
@@ -129,6 +136,7 @@ export function activate(context: vscode.ExtensionContext) {
               color: ColorType.DarkBlue,
               nextColor: ColorType.Green,
               coordinates: { x: 0, y: 0 },
+              dimensions: { length: 100, width: 100 },
             },
           ];
           updateShapes(newShapes);
@@ -202,6 +210,33 @@ export function activate(context: vscode.ExtensionContext) {
           }
 
           break;
+        case CommandType.resizeShape:
+          const shapeToResive = app.canvas
+            .getShapes()
+            .find((shape) => shape.id === message.id);
+
+          if (shapeToResive) {
+            app.canvas.resizeShape(
+              shapeToResive.id,
+              message.width,
+              message.height
+            );
+          }
+          const updatedShapes = shapes.map((shape) =>
+            shape.id === message.id
+              ? {
+                  ...shape,
+                  dimensions: {
+                    length: message.width,
+                    width: message.height,
+                  },
+                }
+              : shape
+          );
+          updateShapes(updatedShapes);
+        
+        break;
+
         case CommandType.saveState:
           app.saveState();
           break;

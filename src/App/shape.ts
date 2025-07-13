@@ -9,6 +9,7 @@ interface Shape {
   render(): string;
   setColor(color: ColorType, nextColor: ColorType): void;
   move(x: number, y: number): void;
+  resize(length: number, width: number): void;
   clone(): Shape;
 }
 
@@ -34,7 +35,7 @@ class Square implements Shape {
                  onclick="event.stopPropagation(); vscode.postMessage({command: 'nextColor', id: ${this.id}}); vscode.postMessage({command: 'saveState'})"
                  style="background: ${this.nextColor};"></div>
           </div>
-          <div class="resize-handle right" onmousedown="startResize(event, ${this.id}, 'right')"></div>
+          <div class="resize-handle right" onmousedown="startResize(event, ${this.id}, 'right')" ></div>
           <div class="resize-handle bottom" onmousedown="startResize(event, ${this.id}, 'bottom')"></div>
           <div class="resize-handle corner" onmousedown="startResize(event, ${this.id}, 'corner')"></div>
           <div class="delete-button"
@@ -57,6 +58,12 @@ class Square implements Shape {
   clone(): Shape {
     return new Square(this.length, this.width, this.x, this.y, this.id, this.color, this.nextColor);
   }
+
+  resize(length: number, width: number) {
+    this.length = length;
+    this.width = width;
+  }
+
 }
 
 class Triangle implements Shape {
@@ -103,6 +110,11 @@ class Triangle implements Shape {
 
   clone(): Shape {
     return new Triangle(this.length, this.width, this.x, this.y, this.id, this.color, this.nextColor);
+  }
+
+  resize(length: number, width: number) {
+    this.length = length;
+    this.width = width;
   }
 }
 
@@ -151,6 +163,13 @@ class Circle implements Shape {
   clone(): Shape {
     return new Circle(this.length, this.width, this.x, this.y, this.id, this.color, this.nextColor);
   }
+
+  resize(length: number, width: number) {
+    this.length = length;
+    this.width = width;
+  }
+
 }
 
 export { Shape, Square, Triangle, Circle };
+

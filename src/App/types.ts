@@ -26,6 +26,7 @@ enum CommandType {
   undo = "Undo",
   redo = "Redo",
   download = "Download",
+  resizeShape = "Resize",
 }
 
 const svgResources = [
@@ -47,6 +48,7 @@ interface ShapeData {
   color: ColorType;
   nextColor: ColorType;
   coordinates: { x: number; y: number };
+  dimensions: { length: number; width: number };
 }
 
 export { ShapeType, objectAlias, ColorType, CommandType, svgResources, ShapeData };

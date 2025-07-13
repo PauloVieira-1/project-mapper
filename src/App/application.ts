@@ -123,16 +123,17 @@ class Application {
     color: ColorType,
     nextColor: ColorType,
     { x, y }: { x: number; y: number },
+    { length, width }: { length: number; width: number },
   ): Shape {
     switch (shapeType) {
       case ShapeType.Circle:
-        return this.circleButton.addShape(shapeType, id, color, nextColor, { x, y });
+        return this.circleButton.addShape(shapeType, id, color, nextColor, { x, y }, { length, width });
       case ShapeType.Triangle:
-        return this.triangleButton.addShape(shapeType, id, color, nextColor, { x, y });
+        return this.triangleButton.addShape(shapeType, id, color, nextColor, { x, y }, { length, width });
       case ShapeType.Arrow:
-        return this.arrowButton.addShape(shapeType, id, color, nextColor, { x, y });
+        return this.arrowButton.addShape(shapeType, id, color, nextColor, { x, y }, { length, width });
       default:
-        return this.squareButton.addShape(ShapeType.Square, id, color, nextColor, { x, y });
+        return this.squareButton.addShape(ShapeType.Square, id, color, nextColor, { x, y }, { length, width });
     }
   }
 
@@ -219,6 +220,16 @@ class Canvas {
     this.shapes = this.shapes.map((s) => {
       if (s.id === id) {
         s.move(x, y);
+      }
+      return s;
+    });
+    this.shapeManager.notifyListeners();
+  }
+
+  resizeShape(id: number, length: number, width: number) {
+    this.shapes = this.shapes.map((s) => {
+      if (s.id === id) {
+        s.resize(length, width);
       }
       return s;
     });

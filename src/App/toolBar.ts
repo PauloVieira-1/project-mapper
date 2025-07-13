@@ -49,6 +49,7 @@ abstract class Button {
     color: ColorType,
     nextColor: ColorType,
     coordinates: { x: number; y: number },
+    dimensions: { length: number; width: number },
   ): Shape;
 }
 
@@ -88,15 +89,17 @@ class ShapeButton extends Button {
     color: ColorType,
     nextColor: ColorType,
     coordinates: { x: number; y: number },
+    dimensions: { length: number; width: number },
   ): Shape {
     const { x, y } = coordinates;
+    const { length, width } = dimensions;
     switch (type) {
       case ShapeType.Circle:
-        return new Circle(100, 100, x, y, id, color, nextColor);
+        return new Circle(length, width, x, y, id, color, nextColor);
       case ShapeType.Triangle:
-        return new Triangle(100, 100, x, y, id, color, nextColor);
+        return new Triangle(length, width, x, y, id, color, nextColor);
       default:
-        return new Square(100, 100, x, y, id, color, nextColor);
+        return new Square(length, width, x, y, id, color, nextColor);
     }
   }
 }
