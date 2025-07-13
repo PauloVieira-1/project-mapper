@@ -177,6 +177,8 @@ function getWebViewContent(
           let resizing = false;
           let currentShapeId = null;
           let resizeDirection = null;
+          let lastWidth = 0;
+          let lastHeight = 0;
 
           function startResize(event, shapeId, direction) {
             event.stopPropagation();
@@ -209,12 +211,12 @@ function getWebViewContent(
             let newHeight = currentHeight;
 
             if (resizeDirection === "right") {
-              newWidth = Math.max(20, mouseX - currentLeft);
+              newWidth = Math.max(10, mouseX - currentLeft);
             } else if (resizeDirection === "bottom") {
-              newHeight = Math.max(20, mouseY - currentTop);
+              newHeight = Math.max(10, mouseY - currentTop);
             } else if (resizeDirection === "corner") {
-              newWidth = Math.max(20, mouseX - currentLeft);
-              newHeight = Math.max(20, mouseY - currentTop);
+              newWidth = Math.max(10, mouseX - currentLeft);
+              newHeight = Math.max(10, mouseY - currentTop);
             }
 
             shape.style.width = newWidth + "px";
