@@ -147,14 +147,17 @@ function getWebViewContent(
             if (dragging && currentShape) {
               const id = currentShape.id.split("-")[2]; // shape-group-<id>
 
+              const positionX = lastX;
+              const positionY = lastY;
+
               vscode.postMessage({
                 command: "Move",
                 text: "Shape",
                 id: parseInt(id),
-                positionX: lastX,
-                positionY: lastY,
-                translateX: lastX,
-                translateY: lastY,
+                positionX,
+                positionY,
+                translateX: positionX,
+                translateY: positionY,
               });
             }
 

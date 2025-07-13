@@ -32,22 +32,24 @@
   background-color: #0098ff;
   height: 5vh;
   width: 5vh;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .button-add:hover {
   background-color: #0065a9;
-  transition: background-color 0.2s ease;
 }
 
 #button-arrow {
   border: #0098ff 2px solid;
   height: 5vh;
   width: 5vh;
+  border-radius: 50%;
 }
 
 #button-arrow:hover {
   background-color: #0098ff;
-  transition: background-color 0.2s ease;
 }
 
 .dropbtn {
@@ -187,9 +189,45 @@
   transition: display 0.5s ease-in-out;
 }
 
+.resize-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #666;
+  z-index: 10;
+  border-radius: 2px;
+  display: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: display 0.5s ease-in-out;
+}
+
+.resize-handle.right {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: ew-resize;
+}
+
+.resize-handle.bottom {
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: ns-resize;
+}
+
+.resize-handle.corner {
+  bottom: -5px;
+  right: -5px;
+  cursor: nwse-resize;
+}
+
 .shape-group:hover .delete-button {
   display: flex;
   transition: display 0.5s ease-in-out;
+}
+
+.shape-group:hover .resize-handle {
+  display: flex;
 }
 
 .delete-button:hover {

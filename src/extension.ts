@@ -76,14 +76,12 @@ export function activate(context: vscode.ExtensionContext) {
     app.setUpCanvas(
       shapes.map(({ shape, id, color, nextColor, coordinates }) => {
         const resolvedNextColor = nextColor ?? getNextEnumValue(color);
-        const resolvedCoordinates = coordinates ?? { x: 0, y: 0 };
-        console.log(shape, id, color, resolvedNextColor, resolvedCoordinates);
         return app.createShape(
           shape as ShapeType,
           id,
           color,
           resolvedNextColor,
-          resolvedCoordinates,
+          coordinates,
         );
       }),
     );
@@ -167,9 +165,11 @@ export function activate(context: vscode.ExtensionContext) {
                     ...shape,
                     color: newColor,
                     nextColor: newNextColor,
+                    coordinates: shape.coordinates ?? { x: 0, y: 0 }, 
                   }
                 : shape,
             );
+            console.log(recoloredShapes.map((shape) => shape.coordinates));
             updateShapes(recoloredShapes);
           }
           break;
@@ -198,7 +198,6 @@ export function activate(context: vscode.ExtensionContext) {
                   }
                 : shape,
             );
-
             updateShapes(updatedShapes);
           }
 
