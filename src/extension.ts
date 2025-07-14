@@ -140,6 +140,7 @@ export function activate(context: vscode.ExtensionContext) {
             },
           ];
           updateShapes(newShapes);
+          app.saveState();
           break;
 
         case CommandType.RemoveShape:
@@ -153,6 +154,7 @@ export function activate(context: vscode.ExtensionContext) {
               (shape) => shape.id !== message.id,
             );
             updateShapes(updatedShapes);
+            app.saveState();
           }
           break;
 
@@ -179,6 +181,7 @@ export function activate(context: vscode.ExtensionContext) {
             );
             console.log(recoloredShapes.map((shape) => shape.coordinates));
             updateShapes(recoloredShapes);
+            app.saveState();
           }
           break;
         
@@ -207,7 +210,9 @@ export function activate(context: vscode.ExtensionContext) {
                 : shape,
             );
             updateShapes(updatedShapes);
+            app.saveState();
           }
+          app.saveState();
 
           break;
         case CommandType.resizeShape:
@@ -234,15 +239,18 @@ export function activate(context: vscode.ExtensionContext) {
               : shape
           );
           updateShapes(updatedShapes);
-        
+          app.saveState();
+
         break;
 
         case CommandType.saveState:
+          console.log("Saving state");
           app.saveState();
           break;
         case CommandType.Clear:
           updateShapes([]);
           app.setUpCanvas([]);
+          app.saveState();
           break;
         case CommandType.undo:
           app.caretaker.undo(app.canvas);

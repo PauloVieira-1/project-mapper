@@ -262,10 +262,11 @@ class Caretaker {
   }
 
   undo(canvas: Canvas) {
-    if (this.snapshots.length > 0) {
-      const snapshot = this.snapshots.pop();
+    if (this.snapshots.length > 1) {
+      const snapshot = this.snapshots[this.snapshots.length - 2];
       if (snapshot) {
         snapshot.restore(canvas);
+        this.snapshots.pop();
       }
     }
   }

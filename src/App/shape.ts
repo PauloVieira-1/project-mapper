@@ -32,7 +32,7 @@ class Square implements Shape {
                style="width:${this.length}px; height:${this.width}px; background:${this.color};"
                onmousedown="startDrag(event, ${this.id})">
             <div class="next-color-indicator"
-                 onclick="event.stopPropagation(); vscode.postMessage({command: 'nextColor', id: ${this.id}}); vscode.postMessage({command: 'saveState'})"
+                 onclick="event.stopPropagation(); vscode.postMessage({command: 'nextColor', id: ${this.id}})"
                  style="background: ${this.nextColor};"></div>
           </div>
           <div class="resize-handle right" onmousedown="startResize(event, ${this.id}, 'right')" ></div>
@@ -85,14 +85,14 @@ class Triangle implements Shape {
                style="border-left: ${this.length / 2}px solid transparent; border-right: ${this.length / 2}px solid transparent; border-bottom: ${this.width}px solid ${this.color};"
                onmousedown="startDrag(event, ${this.id})">
             <div class="next-color-indicator"
-                 onclick="event.stopPropagation(); vscode.postMessage({command: 'nextColor', id: ${this.id}}); vscode.postMessage({command: 'saveState'})"
+                 onclick="event.stopPropagation(); vscode.postMessage({command: 'nextColor', id: ${this.id}})"
                  style="background: ${this.nextColor}; top: -8px; left: -8px;"></div>
           </div>
           <div class="resize-handle right" onmousedown="startResize(event, ${this.id}, 'right')"></div>
           <div class="resize-handle bottom" onmousedown="startResize(event, ${this.id}, 'bottom')"></div>
           <div class="resize-handle corner" onmousedown="startResize(event, ${this.id}, 'corner')"></div>
           <div class="delete-button"
-               onclick="event.stopPropagation(); vscode.postMessage({command: 'Remove', text: 'Triangle', id: ${this.id}}); vscode.postMessage({command: 'saveState'})">×</div>
+               onclick="event.stopPropagation(); vscode.postMessage({command: 'Remove', text: 'Triangle', id: ${this.id}}); ">×</div>
         </div>
       </div>
     `;
@@ -137,14 +137,14 @@ class Circle implements Shape {
                style="width:${this.length}px; height:${this.width}px; background:${this.color}; border-radius:50%;"
                onmousedown="startDrag(event, ${this.id})">
             <div class="next-color-indicator"
-                 onclick="event.stopPropagation(); vscode.postMessage({command: 'nextColor', id: ${this.id}}); vscode.postMessage({command: 'saveState'})"
+                 onclick="event.stopPropagation(); vscode.postMessage({command: 'nextColor', id: ${this.id}}); "
                  style="background: ${this.nextColor}; top: -8px; left: -8px;"></div>
           </div>
           <div class="resize-handle right" onmousedown="startResize(event, ${this.id}, 'right')"></div>
           <div class="resize-handle bottom" onmousedown="startResize(event, ${this.id}, 'bottom')"></div>
           <div class="resize-handle corner" onmousedown="startResize(event, ${this.id}, 'corner')"></div>
           <div class="delete-button"
-               onclick="event.stopPropagation(); vscode.postMessage({command: 'Remove', text: 'Circle', id: ${this.id}}); vscode.postMessage({command: 'saveState'})">×</div>
+               onclick="event.stopPropagation(); vscode.postMessage({command: 'Remove', text: 'Circle', id: ${this.id}})">×</div>
         </div>
       </div>
     `;
