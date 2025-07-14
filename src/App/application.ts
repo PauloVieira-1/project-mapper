@@ -127,13 +127,41 @@ class Application {
   ): Shape {
     switch (shapeType) {
       case ShapeType.Circle:
-        return this.circleButton.addShape(shapeType, id, color, nextColor, { x, y }, { length, width });
+        return this.circleButton.addShape(
+          shapeType,
+          id,
+          color,
+          nextColor,
+          { x, y },
+          { length, width },
+        );
       case ShapeType.Triangle:
-        return this.triangleButton.addShape(shapeType, id, color, nextColor, { x, y }, { length, width });
+        return this.triangleButton.addShape(
+          shapeType,
+          id,
+          color,
+          nextColor,
+          { x, y },
+          { length, width },
+        );
       case ShapeType.Arrow:
-        return this.arrowButton.addShape(shapeType, id, color, nextColor, { x, y }, { length, width });
+        return this.arrowButton.addShape(
+          shapeType,
+          id,
+          color,
+          nextColor,
+          { x, y },
+          { length, width },
+        );
       default:
-        return this.squareButton.addShape(ShapeType.Square, id, color, nextColor, { x, y }, { length, width });
+        return this.squareButton.addShape(
+          ShapeType.Square,
+          id,
+          color,
+          nextColor,
+          { x, y },
+          { length, width },
+        );
     }
   }
 
@@ -150,14 +178,13 @@ class Application {
     } as WebViewContentOptions & ExtendedWebViewContentOptions);
   }
 
-  createSnapshot(){
+  createSnapshot() {
     return new Snapshot(this.canvas.getShapes());
   }
 
-  saveState(){
+  saveState() {
     this.caretaker.add(this.createSnapshot());
   }
-
 }
 
 class ShapeManager {
@@ -241,18 +268,17 @@ class Snapshot {
   private shapes: Shape[];
 
   constructor(shapes: Shape[]) {
-    this.shapes = shapes.map((s) => s.clone()); 
+    this.shapes = shapes.map((s) => s.clone());
   }
 
   restore(canvas: Canvas) {
-    canvas.setShapes(this.shapes.map((s) => s.clone())); 
+    canvas.setShapes(this.shapes.map((s) => s.clone()));
   }
 
   getShapes(): Shape[] {
-    return this.shapes.map((s) => s.clone()); 
+    return this.shapes.map((s) => s.clone());
   }
 }
-
 
 class Caretaker {
   private snapshots: Snapshot[] = [];
@@ -275,15 +301,15 @@ class Caretaker {
     if (this.snapshots.length > 0) {
       const snapshot = this.snapshots.pop();
       if (snapshot) {
-        canvas.setShapes(snapshot.getShapes());
+        snapshot.restore(canvas);
+        this.snapshots.push(snapshot);
       }
     }
   }
 
-  getSnapshots(){
+  getSnapshots() {
     return [...this.snapshots];
   }
 }
-
 
 export { Application };

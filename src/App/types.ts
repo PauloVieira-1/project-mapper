@@ -30,17 +30,17 @@ enum CommandType {
 }
 
 const svgResources = [
-      "plus",
-      "arrow",
-      "square",
-      "triangle",
-      "circle",
-      "trash",
-      "list",
-      "redo",
-      "undo",
-      "download",
-    ];
+  "plus",
+  "arrow",
+  "square",
+  "triangle",
+  "circle",
+  "trash",
+  "list",
+  "redo",
+  "undo",
+  "download",
+];
 
 interface ShapeData {
   shape: ShapeType;
@@ -51,4 +51,11 @@ interface ShapeData {
   dimensions: { length: number; width: number };
 }
 
-export { ShapeType, objectAlias, ColorType, CommandType, svgResources, ShapeData };
+export {
+  ShapeType,
+  objectAlias,
+  ColorType,
+  CommandType,
+  svgResources,
+  ShapeData,
+};

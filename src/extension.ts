@@ -1,7 +1,13 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { Application } from "./App/application";
-import { ColorType, ShapeType, CommandType, svgResources, ShapeData } from "./App/types";
+import {
+  ColorType,
+  ShapeType,
+  CommandType,
+  svgResources,
+  ShapeData,
+} from "./App/types";
 import { idGenerator, getNextEnumValue, isShapeMessage } from "./App/helpers";
 import debounce from "lodash.debounce";
 
@@ -39,7 +45,8 @@ export function activate(context: vscode.ExtensionContext) {
     } catch (e) {
       console.error(e);
       vscode.window.showErrorMessage(
-        "An error occurred while saving shapes. Please try again.");
+        "An error occurred while saving shapes. Please try again.",
+      );
     }
   }, 500);
 
@@ -71,7 +78,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     // START: Setup application and restore saved shapes
     const app = new Application(svgObject, panel);
-    let shapes: ShapeData[] = context.workspaceState.get<ShapeData[]>("shapes") || [];
+    let shapes: ShapeData[] =
+      context.workspaceState.get<ShapeData[]>("shapes") || [];
 
     app.setUpCanvas(
       shapes.map(({ shape, id, color, nextColor, coordinates, dimensions }) => {
@@ -175,7 +183,7 @@ export function activate(context: vscode.ExtensionContext) {
                     ...shape,
                     color: newColor,
                     nextColor: newNextColor,
-                    coordinates: shape.coordinates ?? { x: 0, y: 0 }, 
+                    coordinates: shape.coordinates ?? { x: 0, y: 0 },
                   }
                 : shape,
             );
@@ -184,7 +192,7 @@ export function activate(context: vscode.ExtensionContext) {
             app.saveState();
           }
           break;
-        
+
         // ===== Shape Actions =====
         case CommandType.MoveShape:
           const shapeToMove = app.canvas
@@ -212,7 +220,7 @@ export function activate(context: vscode.ExtensionContext) {
             updateShapes(updatedShapes);
             app.saveState();
           }
-          app.saveState();
+          console.log(app.caretaker.getSnapshots());
 
           break;
         case CommandType.resizeShape:
@@ -224,7 +232,7 @@ export function activate(context: vscode.ExtensionContext) {
             app.canvas.resizeShape(
               shapeToResive.id,
               message.width,
-              message.height
+              message.height,
             );
           }
           const updatedShapes = shapes.map((shape) =>
@@ -236,12 +244,12 @@ export function activate(context: vscode.ExtensionContext) {
                     width: message.height,
                   },
                 }
-              : shape
+              : shape,
           );
           updateShapes(updatedShapes);
           app.saveState();
 
-        break;
+          break;
 
         case CommandType.saveState:
           console.log("Saving state");

@@ -199,7 +199,9 @@ function getWebViewContent(
             const mouseX = event.clientX - canvasRect.left;
             const mouseY = event.clientY - canvasRect.top;
 
-            const shape = document.getElementById("shape-group-" + currentShapeId);
+            const shape = document.getElementById(
+              "shape-group-" + currentShapeId,
+            );
             if (!shape) return;
 
             const currentLeft = shape.offsetLeft;

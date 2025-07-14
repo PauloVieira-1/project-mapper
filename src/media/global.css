@@ -34,7 +34,6 @@
   width: 5vh;
   border-radius: 50%;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
 .button-add:hover {
@@ -59,8 +58,8 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
+
 
 .dropdown {
   position: relative;
@@ -148,8 +147,8 @@
 }
 
 .next-color-indicator {
-  width: 12px;
-  height: 12px;
+  width: 15px;
+  height: 15px;
   border: 1px solid #333;
   border-radius: 50%;
   position: absolute;
@@ -163,7 +162,7 @@
   display: none;
 }
 
-.shape:hover .next-color-indicator {
+.shape-group:hover .next-color-indicator {
   display: block;
 }
 
