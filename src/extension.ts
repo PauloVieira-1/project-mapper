@@ -247,8 +247,6 @@ export function activate(context: vscode.ExtensionContext) {
               : shape,
           );
           updateShapes(updatedShapes);
-          app.saveState();
-
           break;
 
         case CommandType.saveState:
@@ -265,6 +263,13 @@ export function activate(context: vscode.ExtensionContext) {
           break;
         case CommandType.redo:
           app.caretaker.redo(app.canvas);
+          break;
+        case CommandType.download:
+          console.log("Downloading shapes");
+          vscode.window.showInformationMessage(
+            "Downloading shapes as PDF...",
+          );
+          app.downloadShapes();
           break;
         default:
           break;

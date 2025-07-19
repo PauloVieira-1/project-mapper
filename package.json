@@ -90,6 +90,7 @@
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
+    "jspdf": "^3.0.1",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "vscode": "^1.1.37"

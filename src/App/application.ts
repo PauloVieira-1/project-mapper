@@ -3,6 +3,7 @@ import getWebViewContent from "./webViewContent";
 import { Shape } from "./shape";
 import * as vscode from "vscode";
 import { objectAlias, ShapeType, ColorType, CommandType } from "./types";
+import { jsPDF } from "jspdf"; 
 
 interface WebViewContentOptions {
   squareButton: Button;
@@ -185,6 +186,22 @@ class Application {
   saveState() {
     this.caretaker.add(this.createSnapshot());
   }
+
+downloadShapes() {
+  const shapes = this.canvas.getShapes(); 
+  const doc = new jsPDF();
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+
+  shapes.forEach((shape, index) => {
+    const y = 10 + index * 10;
+    doc.text(`Shape ${index + 1}: ${JSON.stringify(shape)}`, 10, y);
+  });
+
+  doc.save("canvas.pdf");
+}
+
 }
 
 class ShapeManager {

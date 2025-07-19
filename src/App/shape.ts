@@ -209,3 +209,4 @@ class Circle implements Shape {
 }
 
 export { Shape, Square, Triangle, Circle };
+3

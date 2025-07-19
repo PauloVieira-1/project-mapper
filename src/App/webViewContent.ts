@@ -55,24 +55,14 @@ function getWebViewContent(
       </head>
 
       <body>
-        <div class="container mx-4 my-10">
-          <h1 class="text-3xl font-bold my-5">Project-Mapper</h1>
-          <a
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            href="https://github.com/PauloVieira-1/project-mapper"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Go to Github!
-          </a>
-        </div>
-
+      
         <div class="grid-background h-screen mx-4 rounded-lg p-5 relative">
           <div
             id="button-menu"
-            class="absolute top-0 right-0 mx-5 my-5 rounded-full px-1 py-2 flex items-center align-center"
+            class="absolute top-0  mx-5 my-5 rounded-full px-1 py-2 flex items-center align-center"
           >
             <!-- Add Shapes Dropdown -->
+            <div class="right" style="margin-right: 5px;">
             <div class="dropdown">
               <button
                 class="dropbtn mx-1 rounded-full flex items-center justify-center"
@@ -87,9 +77,7 @@ function getWebViewContent(
                 ${squareHtml} ${circleHtml} ${triangleHtml}
               </div>
             </div>
-
-            ${arrowHtml} ${trashHtml}
-
+             ${arrowHtml} ${trashHtml}
             <!-- Settings Dropdown -->
             <div class="dropdown">
               <button
@@ -101,12 +89,12 @@ function getWebViewContent(
                   style="width: 70%; height: 70%;"
                 />
               </button>
-              <div class="dropdown-content">
+              <div class="left dropdown-content">
                 ${redoHtml} ${undoHtml} ${downloadHtml}
               </div>
             </div>
           </div>
-
+          </div>
           <div id="canvas">${shapesHtml}</div>
         </div>
 
@@ -238,6 +226,11 @@ function getWebViewContent(
             resizeDirection = null;
             document.removeEventListener("mousemove", onResize);
             document.removeEventListener("mouseup", stopResize);
+
+            vscode.postMessage({
+              command: "saveState",
+              id: parseInt(currentShapeId),
+            });
           }
         </script>
       </body>
