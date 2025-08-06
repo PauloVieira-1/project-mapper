@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import { Shape } from "./shape";
-import { Button } from "./toolBar";
+import { Shape } from "../App/shape";
+import { Button } from "../App/toolBar";
 
 const html = String.raw;
 

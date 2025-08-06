@@ -19,6 +19,10 @@
       {
         "command": "projectmapper.launch",
         "title": "Launch Project-Mapper"
+      },
+      {
+        "command": "projectmapper.open",
+        "title": "Open Project-Mapper "
       }
     ],
     "languages": [

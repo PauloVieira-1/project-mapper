@@ -1,5 +1,5 @@
 import { CreateShapeButton, CreateToolButton, Button } from "./toolBar";
-import getWebViewContent from "./webViewContent";
+import getWebViewContent from "../webViews/webViewContent";
 import { Shape } from "./shape";
 import * as vscode from "vscode";
 import { objectAlias, ShapeType, ColorType, CommandType } from "./types";
@@ -14,6 +14,7 @@ interface WebViewContentOptions {
   undo: Button;
   redo: Button;
   download: Button;
+
 }
 
 interface ExtendedWebViewContentOptions extends WebViewContentOptions {

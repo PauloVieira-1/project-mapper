@@ -10,6 +10,9 @@ import {
 } from "./App/types";
 import { idGenerator, getNextEnumValue, isShapeMessage } from "./App/helpers";
 import debounce from "lodash.debounce";
+import { handleShapeCommand } from "./App/shapeCommandHandler";
+
+
 
 /**
  * Called when the extension is activated.
@@ -23,6 +26,29 @@ export function activate(context: vscode.ExtensionContext) {
   const resourceUri = (relativePath: string) => {
     return vscode.Uri.file(path.join(context.extensionPath, relativePath));
   };
+
+
+  const launchMenu = vscode.commands.registerCommand(
+    "projectmapper.launch",
+    () => {
+      const panel = vscode.window.createWebviewPanel(
+        "projectMapper",
+        "Project-Mapper",
+        vscode.ViewColumn.One,
+        {
+          enableScripts: true,
+          retainContextWhenHidden: true,
+          localResourceRoots: [
+            resourceUri("src/media"),
+            resourceUri("src/icons"),
+            resourceUri("src/App"),
+          ],
+        },
+      );    
+    },
+  );
+
+
 
   /**
    * Creates a URI that can be used in the webview to refer to a file
@@ -39,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
     );
   };
 
-  const updateShapes = debounce((shapes: ShapeData[]) => {
+  const updateShapesGlobal = debounce((shapes: ShapeData[]) => {
     try {
       context.workspaceState.update("shapes", shapes);
     } catch (e) {
@@ -50,11 +76,11 @@ export function activate(context: vscode.ExtensionContext) {
     }
   }, 500);
 
-  const open = vscode.commands.registerCommand("projectmapper.launch", () => {
+  const open = vscode.commands.registerCommand("projectmapper.open", () => {
     const panel = vscode.window.createWebviewPanel(
       "projectMapper",
       "Project-Mapper",
-      vscode.ViewColumn.Two,
+      vscode.ViewColumn.One,
       {
         enableScripts: true,
         retainContextWhenHidden: true,
@@ -115,165 +141,15 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       // ===== Shape Lifecycle =====
-      switch (message.command) {
-        case CommandType.AddShape:
-          const shapeId = idGenerator();
 
-          app.canvas.addShape(
-            app.createShape(
-              message.text,
-              shapeId,
-              ColorType.DarkBlue,
-              ColorType.Green,
-              {
-                x: 0,
-                y: 0,
-              },
-              {
-                length: 100,
-                width: 100,
-              },
-            ),
-          );
-
-          const newShapes = [
-            ...shapes,
-            {
-              shape: message.text,
-              id: shapeId,
-              color: ColorType.DarkBlue,
-              nextColor: ColorType.Green,
-              coordinates: { x: 0, y: 0 },
-              dimensions: { length: 100, width: 100 },
-            },
-          ];
-          updateShapes(newShapes);
-          app.saveState();
-          break;
-
-        case CommandType.RemoveShape:
-          const shapeToRemove = app.canvas
-            .getShapes()
-            .find((shape) => shape.id === message.id);
-          if (shapeToRemove) {
-            app.canvas.removeShape(shapeToRemove.id);
-
-            const updatedShapes = shapes.filter(
-              (shape) => shape.id !== message.id,
-            );
-            updateShapes(updatedShapes);
-            app.saveState();
-          }
-          break;
-
-        // ===== Shape Appearance =====
-        case CommandType.ChangeColor:
-          const shapeToColor = app.canvas
-            .getShapes()
-            .find((shape) => shape.id === message.id);
-          if (shapeToColor) {
-            const newColor = getNextEnumValue(shapeToColor.color);
-            const newNextColor = getNextEnumValue(newColor);
-
-            app.canvas.changeColor(shapeToColor.id, newColor, newNextColor);
-
-            const recoloredShapes = shapes.map((shape) =>
-              shape.id === message.id
-                ? {
-                    ...shape,
-                    color: newColor,
-                    nextColor: newNextColor,
-                    coordinates: shape.coordinates ?? { x: 0, y: 0 },
-                  }
-                : shape,
-            );
-            console.log(recoloredShapes.map((shape) => shape.coordinates));
-            updateShapes(recoloredShapes);
-            app.saveState();
-          }
-          break;
-
-        // ===== Shape Actions =====
-        case CommandType.MoveShape:
-          const shapeToMove = app.canvas
-            .getShapes()
-            .find((shape) => shape.id === message.id);
-
-          if (shapeToMove) {
-            app.canvas.moveShape(
-              shapeToMove.id,
-              message.translateX,
-              message.translateY,
-            );
-
-            const updatedShapes = shapes.map((shape) =>
-              shape.id === message.id
-                ? {
-                    ...shape,
-                    coordinates: {
-                      x: message.translateX,
-                      y: message.translateY,
-                    },
-                  }
-                : shape,
-            );
-            updateShapes(updatedShapes);
-            app.saveState();
-          }
-          console.log(app.caretaker.getSnapshots());
-
-          break;
-        case CommandType.resizeShape:
-          const shapeToResive = app.canvas
-            .getShapes()
-            .find((shape) => shape.id === message.id);
-
-          if (shapeToResive) {
-            app.canvas.resizeShape(
-              shapeToResive.id,
-              message.width,
-              message.height,
-            );
-          }
-          const updatedShapes = shapes.map((shape) =>
-            shape.id === message.id
-              ? {
-                  ...shape,
-                  dimensions: {
-                    length: message.width,
-                    width: message.height,
-                  },
-                }
-              : shape,
-          );
-          updateShapes(updatedShapes);
-          break;
-
-        case CommandType.saveState:
-          console.log("Saving state");
-          app.saveState();
-          break;
-        case CommandType.Clear:
-          updateShapes([]);
-          app.setUpCanvas([]);
-          app.saveState();
-          break;
-        case CommandType.undo:
-          app.caretaker.undo(app.canvas);
-          break;
-        case CommandType.redo:
-          app.caretaker.redo(app.canvas);
-          break;
-        case CommandType.download:
-          console.log("Downloading shapes");
-          vscode.window.showInformationMessage(
-            "Downloading shapes as PDF...",
-          );
-          app.downloadShapes();
-          break;
-        default:
-          break;
-      }
+      shapes = handleShapeCommand(
+        message,
+        app,
+        shapes,
+        updateShapesGlobal,
+        app.saveState.bind(app),
+      );
+  
     });
   });
 
@@ -281,3 +157,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {}
+
+
+
+// Comand handler for adding shapes
