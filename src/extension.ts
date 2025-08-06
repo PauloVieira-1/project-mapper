@@ -2,17 +2,14 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { Application } from "./App/application";
 import {
-  ColorType,
   ShapeType,
-  CommandType,
   svgResources,
   ShapeData,
 } from "./App/types";
 import { idGenerator, getNextEnumValue, isShapeMessage } from "./App/helpers";
 import debounce from "lodash.debounce";
 import { handleShapeCommand } from "./App/shapeCommandHandler";
-
-
+import MenuHandler from "./App/Menu/MenuHandler";
 
 /**
  * Called when the extension is activated.
@@ -23,32 +20,20 @@ import { handleShapeCommand } from "./App/shapeCommandHandler";
  * @param context The extension context.
  */
 export function activate(context: vscode.ExtensionContext) {
+
+
+/**
+ * Generates a file URI for a given relative path within the extension's directory.
+ *
+ * @param relativePath - The path to the file relative to the extension's root directory.
+ * @returns A vscode.Uri object representing the file URI.
+ */
+
+  
+
   const resourceUri = (relativePath: string) => {
     return vscode.Uri.file(path.join(context.extensionPath, relativePath));
   };
-
-
-  const launchMenu = vscode.commands.registerCommand(
-    "projectmapper.launch",
-    () => {
-      const panel = vscode.window.createWebviewPanel(
-        "projectMapper",
-        "Project-Mapper",
-        vscode.ViewColumn.One,
-        {
-          enableScripts: true,
-          retainContextWhenHidden: true,
-          localResourceRoots: [
-            resourceUri("src/media"),
-            resourceUri("src/icons"),
-            resourceUri("src/App"),
-          ],
-        },
-      );    
-    },
-  );
-
-
 
   /**
    * Creates a URI that can be used in the webview to refer to a file
@@ -64,6 +49,56 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.Uri.file(path.join(context.extensionPath, relativePath)),
     );
   };
+
+  // MENU WEBVIEW
+
+  const launchMenu = vscode.commands.registerCommand(
+    "projectmapper.launch",
+    () => {
+      const menuPanel = vscode.window.createWebviewPanel(
+        "projectMapper",
+        "Project-Mapper",
+        vscode.ViewColumn.One,
+        {
+          enableScripts: true,
+          retainContextWhenHidden: true,
+          localResourceRoots: [
+            resourceUri("src/styles"),
+            resourceUri("src/icons"),
+            resourceUri("src/App"),
+          ],
+        },
+      );
+
+      const cssUri = webViewUri(menuPanel, "src/styles/menu.css");
+    
+        const svgObject = svgResources.reduce(
+          (list, item) => {
+            list[item] = webViewUri(menuPanel, `src/icons/${item}.svg`).toString();
+            return list;
+          },
+          {} as { [key: string]: string },
+        );
+
+      const menuHandler = MenuHandler.getInstance(cssUri.toString(), svgResources);
+      menuPanel.webview.html = menuHandler.webViewContent();
+
+      
+      menuPanel.onDidDispose(
+        () => {
+          menuPanel.dispose();
+        },
+        null,
+        context.subscriptions,
+      );
+    },
+  );
+
+
+
+
+  // CANVAS WEBVIEW
+
 
   const updateShapesGlobal = debounce((shapes: ShapeData[]) => {
     try {
@@ -85,14 +120,14 @@ export function activate(context: vscode.ExtensionContext) {
         enableScripts: true,
         retainContextWhenHidden: true,
         localResourceRoots: [
-          resourceUri("src/media"),
+          resourceUri("src/styles"),
           resourceUri("src/icons"),
           resourceUri("src/App"),
         ],
       },
     );
 
-    const cssUri = webViewUri(panel, "src/media/global.css");
+    const cssUri = webViewUri(panel, "src/styles/global.css");
 
     const svgObject = svgResources.reduce(
       (list, item) => {
