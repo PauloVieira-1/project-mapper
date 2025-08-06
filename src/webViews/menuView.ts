@@ -1,8 +1,17 @@
+import {  Button } from "../App/toolBar";
+import * as vscode from "vscode";
 
 
+function getMenuViewContent(cssUri: vscode.Uri, svgObject: any, canvases: any): string {
 
-function getMenuViewContent(cssUri: string, svgResources: string[]): string {
-  
+  const canvasContent = canvases.map((canvas: any) => {
+    return `<div class=" h-50 w-50 mx-4 rounded-lg p-5 relative bg-blue-500">
+              <!-- Canvas content can be rendered here using canvas data -->
+            </div>`;
+
+  }).join("");
+
+
   return `<!DOCTYPE html>
     <html lang="en">
       <head>
@@ -15,21 +24,34 @@ function getMenuViewContent(cssUri: string, svgResources: string[]): string {
         />
         <link rel="stylesheet" type="text/css" href="${cssUri}" />
         <style>
-          .resize-handle {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 10px;
-            height: 10px;
-            cursor: se-resize;
-          }
+        
+
         </style>
       </head>
-
+      <script>
+        const vscode = acquireVsCodeApi();
+        function handleButtonClick(command) {
+          vscode.postMessage({ command });
+        }
+      </script>
       <body>
-        <div class="flex flex-row">
-            TEST
-        </div>
+        <div class="grid-background h-screen mx-4 rounded-lg p-5 relative">
+                    <div class="flex justify-between items-center mb-4">    
+        <button
+                class="button-add mx-1 rounded-full flex items-center justify-center"
+              >
+                <img
+                  src="${svgObject.plus}"
+                  alt="Add"
+                  style="width: 70%; height: 70%;"
+                  onclick="handleButtonClick('createCanvas')"
+                />
+              </button>
+            </div>
+              <div>
+                ${canvasContent}
+              </div>
+              </div>
       </body>
     </html>`;
 }

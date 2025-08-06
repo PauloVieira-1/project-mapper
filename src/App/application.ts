@@ -5,6 +5,7 @@ import * as vscode from "vscode";
 import { objectAlias, ShapeType, ColorType, CommandType } from "./types";
 import { jsPDF } from "jspdf"; 
 
+
 interface WebViewContentOptions {
   squareButton: Button;
   circleButton: Button;
@@ -36,7 +37,7 @@ class Application {
   public canvas = new Canvas();
   public caretaker = new Caretaker();
 
-  constructor(resources: objectAlias, panel: vscode.WebviewPanel) {
+  constructor(resources: objectAlias) {
     this.svgObject = resources;
     this.initialize();
   }

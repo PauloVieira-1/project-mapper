@@ -1,0 +1,38 @@
+.grid-background {
+  background-color: #323232;
+  border-color: #323232;
+  height: 95vh;
+  width: 95vw;
+  background-repeat: repeat;
+  background-position: center;
+  background-size: 200px 200px;
+  margin-top: 25px;
+}
+
+.button-add {
+  background-color: #0098ff;
+  height: 5vh;
+  width: 5vh;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+}
+
+.button-add:hover {
+  background-color: #0065a9;
+}
+
+
+#canvas {
+  background-color: #323232;
+  border-color: #323232;
+  height: 100%;
+  width: 100%;
+  background-repeat: repeat;
+  background-position: center;
+  background-size: 200px 200px;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+
+}
