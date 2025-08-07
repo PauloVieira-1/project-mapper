@@ -1,5 +1,5 @@
 import { getMenuViewContent } from "../../webViews/menuView";
-import { objectAlias } from "../types";
+import { objectAlias, canvasType } from "../types";
 import * as vscode from "vscode";
 
 class menuEventListener {
@@ -26,7 +26,7 @@ class MenuHandler {
   private static instance: MenuHandler | null = null;
   public static eventListener: menuEventListener = new menuEventListener();
   private svgResources: objectAlias;
-  private canvases: any[] = [];
+  private canvases: canvasType[] = [];
 
   private constructor(
     private cssUri: vscode.Uri,
@@ -34,8 +34,6 @@ class MenuHandler {
   ) {
     this.svgResources = svgObject;
   }
-
-  public initialize() {}
 
   public static getInstance(
     cssUri: vscode.Uri,
@@ -51,16 +49,16 @@ class MenuHandler {
     return getMenuViewContent(this.cssUri, this.svgResources, this.canvases);
   }
 
-  public setCanvases(canvases: any[]) {
+  public setCanvases(canvases: canvasType[]) {
     this.canvases = canvases;
     MenuHandler.eventListener.notifyListeners();
   }
 
-  public getCanvases(): any[] {
+  public getCanvases(): canvasType[] {
     return this.canvases;
   }
 
-  public addCanvas(canvas: any) {
+  public addCanvas(canvas: canvasType) {
     this.canvases.push(canvas);
     MenuHandler.eventListener.notifyListeners();
   }

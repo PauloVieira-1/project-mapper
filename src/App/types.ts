@@ -1,5 +1,6 @@
 type objectAlias = Record<string, string>;
 
+
 enum ShapeType {
   Square = "Square",
   Triangle = "Triangle",
@@ -60,6 +61,11 @@ interface ShapeData {
   dimensions: { length: number; width: number };
 }
 
+interface canvasType {
+  id: string;
+  name: string;
+}
+
 export {
   ShapeType,
   objectAlias,
@@ -68,4 +74,5 @@ export {
   svgResources,
   ShapeData,
   MenuCommandType,
+  canvasType,
 };

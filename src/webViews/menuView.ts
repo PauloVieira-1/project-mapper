@@ -1,14 +1,14 @@
-import {  Button } from "../App/toolBar";
 import * as vscode from "vscode";
+import { canvasType } from "../App/types";
 
 function getMenuViewContent(
   cssUri: vscode.Uri,
-  svgObject: any,
-  canvases: any,
+  svgObject: { [key: string]: string },
+  canvases: canvasType[],
 ): string {
   const canvasContent = canvases
     .map(
-      (canvas: any) => `
+      (canvas: canvasType) => `
     <div id="canvas-${canvas.id}" class="h-50 w-50 mx-4 rounded-lg p-5 relative bg-blue-500"
          onclick="handleButtonClick('openCanvas', { canvasId: '${canvas.id}' })">
          <!-- Canvas content can be rendered here using canvas data -->

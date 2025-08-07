@@ -4,8 +4,10 @@ import debounce from "lodash.debounce";
 import { menuCommandHandler } from "./App/Handlers/menuCommandHandler";
 import MenuHandler from "./App/Menu/MenuHandler";
 import { resourceUri, webViewUri, createSvgObject } from "./App/webviewUtils";
+import { canvasType } from "./App/types";
 
 export function activate(context: vscode.ExtensionContext) {
+
   // =====================================
   // ========== MENU WEBVIEW =============
   // =====================================
@@ -31,17 +33,19 @@ export function activate(context: vscode.ExtensionContext) {
       const cssUriMenu = webViewUri(menuPanel, "src/styles/menu.css", context);
       const svgObjectMenu = createSvgObject(menuPanel, context);
 
+      // Render Menu
+      const menuHandler = MenuHandler.getInstance(cssUriMenu, svgObjectMenu);
+
+      // Render Canvas
       const updateWebView = debounce(() => {
         menuPanel.webview.html = menuHandler.webViewContent();
       }, 500);
-
-      // Render Menu
-      const menuHandler = MenuHandler.getInstance(cssUriMenu, svgObjectMenu);
-      menuHandler.initialize();
+      
+      // Listen for menu events
       MenuHandler.eventListener.addListener(updateWebView);
 
       // Retrieve all saved canvases
-      let canvases: any[] = context.workspaceState.get("canvases") || [];
+      let canvases: canvasType[] = context.workspaceState.get("canvases") || [];
       menuHandler.setCanvases(canvases);
 
       menuPanel.webview.html = menuHandler.webViewContent();
@@ -52,51 +56,22 @@ export function activate(context: vscode.ExtensionContext) {
       // Listen for menu events
       menuPanel.webview.onDidReceiveMessage((message) => {
         const command = message.command;
-        menuCommandHandler(command, message, context, canvases, appInstances);
+        try {
+          menuCommandHandler(command, message, context, canvases, appInstances);
+        } catch (error) {
+          console.error("Error handling menu command:", error);
+          vscode.window.showErrorMessage(
+            "An error occurred while processing the command. Please try again.",
+          );
+        }
       });
 
-      menuPanel.onDidDispose(() => {}, null, context.subscriptions);
+      menuPanel.onDidDispose(() => {
+        MenuHandler.eventListener.removeListener(updateWebView);
+      }, null, context.subscriptions);
     },
   );
 
-  // =====================================
-  // ========== CANVAS WEBVIEW ===========
-  // =====================================
-
-  //TODO: Refactor to match launchMenu’s canvas logic
-
-  // const updateShapesGlobal = debounce((shapes: ShapeData[]) => {
-  //   try {
-  //     context.workspaceState.update("shapes", shapes);
-  //   } catch (e) {
-  //     console.error(e);
-  //     vscode.window.showErrorMessage(
-  //       "An error occurred while saving shapes. Please try again.",
-  //     );
-  //   }
-  // }, 500);
-
-  // const open = vscode.commands.registerCommand("projectmapper.open", () => {
-  //   // Currently commented-out, can be refactored to match launchMenu’s canvas logic
-  //   const panel = vscode.window.createWebviewPanel(
-  //     "projectMapper",
-  //     "Project-Mapper",
-  //     vscode.ViewColumn.One,
-  //     {
-  //       enableScripts: true,
-  //       retainContextWhenHidden: true,
-  //       localResourceRoots: [
-  //         resourceUri("src/styles"),
-  //         resourceUri("src/icons"),
-  //         resourceUri("src/App"),
-  //       ],
-  //     },
-  //   );
-
-  // });
-
-  // Register commands
-  // context.subscriptions.push(open);
   context.subscriptions.push(launchMenu);
 }
 

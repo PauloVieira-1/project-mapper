@@ -1,5 +1,4 @@
-import { Shape } from "./shape";
-import { ColorType, CommandType, ShapeType } from "./types";
+import { ColorType, CommandType } from "./types";
 
 /**
  * Generates a unique identifier.

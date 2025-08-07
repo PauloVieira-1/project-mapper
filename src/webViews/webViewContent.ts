@@ -6,7 +6,7 @@ const html = String.raw;
 
 function getWebViewContent(
   cssUri: vscode.Uri,
-  svgObject: any,
+  svgObject: { [key: string] :string},
   shapes: Shape[],
   buttons: {
     squareButton: Button;
