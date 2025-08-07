@@ -67,7 +67,7 @@ export function activate(context: vscode.ExtensionContext) {
       });
 
       menuPanel.onDidDispose(() => {
-        MenuHandler.eventListener.removeListener(updateWebView);
+
       }, null, context.subscriptions);
     },
   );

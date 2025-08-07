@@ -107,6 +107,11 @@ export function menuCommandHandler(
         );
       });
 
+      panel.onDidDispose(() => {
+        app.canvas.shapeManager.removeListener(updateWebView);
+        delete appInstances[canvasId];
+      }, null, context.subscriptions);  
+
       break;
     case MenuCommandType.removeCanvas:
       // Handle closing menu

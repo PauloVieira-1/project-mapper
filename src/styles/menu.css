@@ -20,6 +20,7 @@
 
 .button-add:hover {
   background-color: #0065a9;
+  transform: scale(1.1);
 }
 
 
@@ -35,4 +36,17 @@
   overflow: hidden;
   z-index: 0;
 
+}
+
+.canvas-item {
+  height: 150px;
+  background-color: #202020;
+  
+}
+
+.canvas-item:hover {
+  border: white 1px solid;
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
 }
