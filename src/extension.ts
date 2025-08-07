@@ -7,7 +7,6 @@ import { resourceUri, webViewUri, createSvgObject } from "./App/webviewUtils";
 import { canvasType } from "./App/types";
 
 export function activate(context: vscode.ExtensionContext) {
-
   // =====================================
   // ========== MENU WEBVIEW =============
   // =====================================
@@ -40,7 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
       const updateWebView = debounce(() => {
         menuPanel.webview.html = menuHandler.webViewContent();
       }, 500);
-      
+
       // Listen for menu events
       MenuHandler.eventListener.addListener(updateWebView);
 
@@ -57,7 +56,19 @@ export function activate(context: vscode.ExtensionContext) {
       menuPanel.webview.onDidReceiveMessage((message) => {
         const command = message.command;
         try {
-          menuCommandHandler(command, message, context, canvases, appInstances);
+          menuCommandHandler(
+            command,
+            message,
+            context,
+            canvases,
+            appInstances,
+            (updatedCanvases) => {
+              canvases = updatedCanvases;
+              menuHandler.setCanvases(updatedCanvases);
+              menuPanel.webview.html = menuHandler.webViewContent();
+              context.workspaceState.update("canvases", updatedCanvases);
+            },
+          );
         } catch (error) {
           console.error("Error handling menu command:", error);
           vscode.window.showErrorMessage(
@@ -66,9 +77,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
       });
 
-      menuPanel.onDidDispose(() => {
-
-      }, null, context.subscriptions);
+      menuPanel.onDidDispose(() => {}, null, context.subscriptions);
     },
   );
 

@@ -7,6 +7,7 @@
   background-position: center;
   background-size: 200px 200px;
   margin-top: 25px;
+  overflow: scroll;
 }
 
 .button-add {
@@ -56,9 +57,24 @@
   padding: 10px;
 }
 
+#remove {
+  display: none;
+}
+
 .box-outline:hover {
   border: white 1px solid;
-  cursor: pointer;
   transform: scale(1.05);
   transition: all 0.2s ease-in-out;
+
+  #remove {
+    display: block;
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+#remove {
+  display: none;
 }

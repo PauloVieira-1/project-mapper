@@ -10,15 +10,16 @@ function getMenuViewContent(
     .map(
       (canvas: canvasType) => `
       <div class="box-outline">
-    <div id="canvas-${canvas.id}" class="rounded-lg p-5 relative canvas-item"
-         onclick="handleButtonClick('openCanvas', { canvasId: '${canvas.id}' })">
-         <!-- Canvas content can be rendered here using canvas data -->
+    <div id="canvas-${canvas.id}" class="rounded-lg p-5 relative canvas-item">
+        <h1 id="remove" class="text-stone-800 font-size-lg font-semibold absolute top-2 right-2 mr-2 pointer" onclick="handleButtonClick('removeCanvas', { canvasId: '${canvas.id}' })">x</h1>
+   <div class="flex items-center pointer h-full w-full mt-3" onclick="handleButtonClick('openCanvas', { canvasId: '${canvas.id}' })" > </div>
     </div>
-<p class="pl-2 mt-3 text-stone-100">DATE test test test</p>
-<p class="pl-2 text-stone-800 font-size-md font-semibold mt-1">NAME test test test</p>
+    <p class="pl-2 mt-3 text-stone-100">${canvas.dateCreated}</p>
+    <input class="pl-2 rounded-lg text-stone-800 bg-transparent font-size-md font-semibold mt-1" type="text" id="canvas-name-${canvas.id}" value="${canvas.name}" onchange="handleInputChange('renameCanvas', { canvasId: '${canvas.id}', name: this.value })" />
     </div>
-  `).join("");
-
+  `,
+    )
+    .join("");
 
   return `<!DOCTYPE html>
     <html lang="en">
@@ -41,13 +42,18 @@ function getMenuViewContent(
         function handleButtonClick(command, data = {}) {
           vscode.postMessage({ command, ...data });
         }
+
+        function handleInputChange(command, data = {}) {
+          vscode.postMessage({ command, ...data });
+        }
+
       </script>
       <body>
       <div class="grid-background h-screen mx-4 rounded-lg p-5 relative">
         <div class="grid grid-cols-1 items-center">
           <div class="flex justify-between items-center my-5">    
               <button
-                class="button-add mx-1 rounded-full flex items-center justify-center mb-2"
+                class="button-add mx-1 rounded-full flex items-center justify-center mb-2 mt-3"
               >
                 <img
                   src="${svgObject.plus}"
@@ -67,4 +73,3 @@ function getMenuViewContent(
 }
 
 export { getMenuViewContent };
-

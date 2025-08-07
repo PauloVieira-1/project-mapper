@@ -1,10 +1,11 @@
-import { MenuCommandType } from "../types";
+import { canvasType, MenuCommandType } from "../types";
 import { Application } from "../application";
 import * as vscode from "vscode";
 import { getNextEnumValue, isShapeMessage } from "../helpers";
 import { ShapeData, ShapeType } from "../types";
 import { handleShapeCommand } from "./shapeCommandHandler";
 import { resourceUri, webViewUri, createSvgObject } from "../webviewUtils";
+import { filter } from "lodash";
 
 export function menuCommandHandler(
   command: MenuCommandType,
@@ -12,6 +13,7 @@ export function menuCommandHandler(
   context: vscode.ExtensionContext,
   canvases: any[],
   appInstances: { [key: string]: Application },
+  updateCanvases: (canvases: any[]) => void,
 ) {
   switch (command) {
     case MenuCommandType.openCanvas:
@@ -100,36 +102,60 @@ export function menuCommandHandler(
           app,
           shapes,
           (updatedShapes) => {
-            // Save shapes for this canvas
             context.workspaceState.update(`shapes_${canvasId}`, updatedShapes);
           },
           app.saveState.bind(app),
         );
       });
 
-      panel.onDidDispose(() => {
-        app.canvas.shapeManager.removeListener(updateWebView);
-        delete appInstances[canvasId];
-      }, null, context.subscriptions);  
+      panel.onDidDispose(
+        () => {
+          app.canvas.shapeManager.removeListener(updateWebView);
+          delete appInstances[canvasId];
+        },
+        null,
+        context.subscriptions,
+      );
 
       break;
     case MenuCommandType.removeCanvas:
       // Handle closing menu
+      const newCanvases = canvases.filter(
+        (c: canvasType) => c.id !== message.canvasId,
+      );
+      if (newCanvases) {
+        updateCanvases(newCanvases);
+      }
       break;
     // Add other cases as needed
     case MenuCommandType.createCanvas:
-      // Handle creating a new canvas
+      const newCanvas = {
+        id: Date.now().toString(),
+        name: "New Canvas",
+        dateCreated: new Date().toLocaleString().replace(",", ""),
+      };
+      const newCanvasList = [...canvases, newCanvas]; // don't mutate original
+      updateCanvases(newCanvasList);
       break;
-    case MenuCommandType.updateCanvases:
-      canvases = message.canvases;
-      context.workspaceState.update("canvases", canvases);
-      break;
+
     case MenuCommandType.renameCanvas:
-      // Handle renaming a canvas
+      {
+        // Handle renaming a canvas
+        const canvasIndex = canvases.findIndex(
+          (c: canvasType) => c.id === message.canvasId,
+        );
+        if (canvasIndex !== -1) {
+          canvases[canvasIndex].name = message.name;
+          updateCanvases([...canvases]);
+        }
+      }
       break;
     case MenuCommandType.clearAll:
-      canvases = [];
-      context.workspaceState.update("canvases", canvases);
+      {
+        // Handle clearing all canvases
+        const newcanvases = [];
+        updateCanvases(canvases);
+      }
       break;
     default:
       // Handle unknown command

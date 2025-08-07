@@ -1,6 +1,5 @@
 type objectAlias = Record<string, string>;
 
-
 enum ShapeType {
   Square = "Square",
   Triangle = "Triangle",
@@ -64,6 +63,7 @@ interface ShapeData {
 interface canvasType {
   id: string;
   name: string;
+  dateCreated: string;
 }
 
 export {
