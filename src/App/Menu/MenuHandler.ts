@@ -1,6 +1,5 @@
 import { getMenuViewContent } from "../../webViews/menuView";
-import { CreateToolButton, Button } from "../toolBar";
-import { CommandType, objectAlias } from "../types";
+import { objectAlias } from "../types";
 import * as vscode from "vscode";
 
 class menuEventListener {
@@ -24,50 +23,52 @@ class menuEventListener {
 }
 
 class MenuHandler {
-    private static instance: MenuHandler | null = null;
-    public static eventListener: menuEventListener = new menuEventListener();
-    private svgResources: objectAlias;
-    private canvases: any[] = [];
+  private static instance: MenuHandler | null = null;
+  public static eventListener: menuEventListener = new menuEventListener();
+  private svgResources: objectAlias;
+  private canvases: any[] = [];
 
-    private constructor(private cssUri: vscode.Uri, private svgObject: objectAlias) {
-        this.svgResources = svgObject;
+  private constructor(
+    private cssUri: vscode.Uri,
+    private svgObject: objectAlias,
+  ) {
+    this.svgResources = svgObject;
+  }
+
+  public initialize() {}
+
+  public static getInstance(
+    cssUri: vscode.Uri,
+    svgResources: objectAlias,
+  ): MenuHandler {
+    if (this.instance === null) {
+      this.instance = new MenuHandler(cssUri, svgResources);
     }
+    return this.instance;
+  }
 
-    public initialize() {
+  webViewContent(): string {
+    return getMenuViewContent(this.cssUri, this.svgResources, this.canvases);
+  }
 
-    }
+  public setCanvases(canvases: any[]) {
+    this.canvases = canvases;
+    MenuHandler.eventListener.notifyListeners();
+  }
 
-    public static getInstance(cssUri: vscode.Uri, svgResources: objectAlias): MenuHandler {
-        if (this.instance === null) {
-            this.instance = new MenuHandler(cssUri, svgResources);
-        }
-        return this.instance;
-    }
+  public getCanvases(): any[] {
+    return this.canvases;
+  }
 
-    webViewContent(): string {
-        return getMenuViewContent(this.cssUri, this.svgResources, this.canvases);
-    }
+  public addCanvas(canvas: any) {
+    this.canvases.push(canvas);
+    MenuHandler.eventListener.notifyListeners();
+  }
 
-    public setCanvases(canvases: any[]) {
-        this.canvases = canvases;
-        MenuHandler.eventListener.notifyListeners();
-    }
-
-    public getCanvases(): any[] {
-        return this.canvases;
-    }
-
-    public addCanvas(canvas: any) {
-        this.canvases.push(canvas);
-        MenuHandler.eventListener.notifyListeners();
-    }
-
-    public removeCanvas(id: string) {
-        this.canvases = this.canvases.filter((c) => c.id !== id);
-        MenuHandler.eventListener.notifyListeners();
-    }
-
+  public removeCanvas(id: string) {
+    this.canvases = this.canvases.filter((c) => c.id !== id);
+    MenuHandler.eventListener.notifyListeners();
+  }
 }
 
 export default MenuHandler;
-

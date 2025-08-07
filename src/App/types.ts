@@ -29,6 +29,15 @@ enum CommandType {
   resizeShape = "Resize",
 }
 
+enum MenuCommandType {
+  createCanvas = "createCanvas",
+  updateCanvases = "updateCanvases",
+  openCanvas = "openCanvas",
+  removeCanvas = "removeCanvas",
+  renameCanvas = "renameCanvas",
+  clearAll = "clearAll",
+}
+
 const svgResources = [
   "plus",
   "arrow",
@@ -58,4 +67,5 @@ export {
   CommandType,
   svgResources,
   ShapeData,
+  MenuCommandType,
 };

@@ -55,7 +55,6 @@ function getWebViewContent(
       </head>
 
       <body>
-      
         <div class="grid-background h-screen mx-4 rounded-lg p-5 relative">
           <div
             id="button-menu"
@@ -63,37 +62,37 @@ function getWebViewContent(
           >
             <!-- Add Shapes Dropdown -->
             <div class="right" style="margin-right: 5px;">
-            <div class="dropdown">
-              <button
-                class="dropbtn mx-1 rounded-full flex items-center justify-center"
-              >
-                <img
-                  src="${svgObject.plus}"
-                  alt="Add"
-                  style="width: 70%; height: 70%;"
-                />
-              </button>
-              <div class="dropdown-content">
-                ${squareHtml} ${circleHtml} ${triangleHtml}
+              <div class="dropdown">
+                <button
+                  class="dropbtn mx-1 rounded-full flex items-center justify-center"
+                >
+                  <img
+                    src="${svgObject.plus}"
+                    alt="Add"
+                    style="width: 70%; height: 70%;"
+                  />
+                </button>
+                <div class="dropdown-content">
+                  ${squareHtml} ${circleHtml} ${triangleHtml}
+                </div>
+              </div>
+              ${arrowHtml} ${trashHtml}
+              <!-- Settings Dropdown -->
+              <div class="dropdown">
+                <button
+                  class="dropbtn mx-1 rounded-full flex items-center justify-center"
+                >
+                  <img
+                    src="${svgObject.list}"
+                    alt="Settings"
+                    style="width: 70%; height: 70%;"
+                  />
+                </button>
+                <div class="left dropdown-content">
+                  ${redoHtml} ${undoHtml} ${downloadHtml}
+                </div>
               </div>
             </div>
-             ${arrowHtml} ${trashHtml}
-            <!-- Settings Dropdown -->
-            <div class="dropdown">
-              <button
-                class="dropbtn mx-1 rounded-full flex items-center justify-center"
-              >
-                <img
-                  src="${svgObject.list}"
-                  alt="Settings"
-                  style="width: 70%; height: 70%;"
-                />
-              </button>
-              <div class="left dropdown-content">
-                ${redoHtml} ${undoHtml} ${downloadHtml}
-              </div>
-            </div>
-          </div>
           </div>
           <div id="canvas">${shapesHtml}</div>
         </div>

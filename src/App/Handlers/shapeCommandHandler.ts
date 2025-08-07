@@ -1,19 +1,15 @@
 // src/App/shapeCommandHandler.ts
 import * as vscode from "vscode";
-import { Application } from "./application";
-import {
-  ColorType,
-  CommandType,
-  ShapeData,
-} from "./types";
-import { idGenerator, getNextEnumValue, isShapeMessage } from "./helpers";
+import { Application } from "../application";
+import { ColorType, CommandType, ShapeData } from "../types";
+import { idGenerator, getNextEnumValue, isShapeMessage } from "../helpers";
 
 export function handleShapeCommand(
   message: any,
   app: Application,
   shapes: ShapeData[],
   updateShapes: (shapes: ShapeData[]) => void,
-  saveState: () => void
+  saveState: () => void,
 ) {
   if (!isShapeMessage(message)) {
     vscode.window.showErrorMessage("Invalid message received");
@@ -31,8 +27,8 @@ export function handleShapeCommand(
           ColorType.DarkBlue,
           ColorType.Green,
           { x: 0, y: 0 },
-          { length: 100, width: 100 }
-        )
+          { length: 100, width: 100 },
+        ),
       );
 
       const newShapes = [
@@ -52,9 +48,7 @@ export function handleShapeCommand(
     }
 
     case CommandType.RemoveShape: {
-      const updatedShapes = shapes.filter(
-        (shape) => shape.id !== message.id
-      );
+      const updatedShapes = shapes.filter((shape) => shape.id !== message.id);
       app.canvas.removeShape(message.id);
       updateShapes(updatedShapes);
       saveState();
@@ -62,7 +56,9 @@ export function handleShapeCommand(
     }
 
     case CommandType.ChangeColor: {
-      const shapeToColor = app.canvas.getShapes().find((shape) => shape.id === message.id);
+      const shapeToColor = app.canvas
+        .getShapes()
+        .find((shape) => shape.id === message.id);
       if (shapeToColor) {
         const newColor = getNextEnumValue(shapeToColor.color);
         const newNextColor = getNextEnumValue(newColor);
@@ -72,7 +68,7 @@ export function handleShapeCommand(
         const recoloredShapes = shapes.map((shape) =>
           shape.id === message.id
             ? { ...shape, color: newColor, nextColor: newNextColor }
-            : shape
+            : shape,
         );
         updateShapes(recoloredShapes);
         saveState();
@@ -93,7 +89,7 @@ export function handleShapeCommand(
                 y: message.translateY,
               },
             }
-          : shape
+          : shape,
       );
       updateShapes(movedShapes);
       saveState();
@@ -112,7 +108,7 @@ export function handleShapeCommand(
                 width: message.height,
               },
             }
-          : shape
+          : shape,
       );
       updateShapes(resizedShapes);
       saveState();

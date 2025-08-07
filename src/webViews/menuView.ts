@@ -1,16 +1,21 @@
-import {  Button } from "../App/toolBar";
+import { Button } from "../App/toolBar";
 import * as vscode from "vscode";
 
-
-function getMenuViewContent(cssUri: vscode.Uri, svgObject: any, canvases: any): string {
-
-  const canvasContent = canvases.map((canvas: any) => {
-    return `<div class=" h-50 w-50 mx-4 rounded-lg p-5 relative bg-blue-500">
-              <!-- Canvas content can be rendered here using canvas data -->
-            </div>`;
-
-  }).join("");
-
+function getMenuViewContent(
+  cssUri: vscode.Uri,
+  svgObject: any,
+  canvases: any,
+): string {
+  const canvasContent = canvases
+    .map(
+      (canvas: any) => `
+    <div id="canvas-${canvas.id}" class="h-50 w-50 mx-4 rounded-lg p-5 relative bg-blue-500"
+         onclick="handleButtonClick('openCanvas', { canvasId: '${canvas.id}' })">
+         <!-- Canvas content can be rendered here using canvas data -->
+    </div>
+  `,
+    )
+    .join("");
 
   return `<!DOCTYPE html>
     <html lang="en">
@@ -30,8 +35,8 @@ function getMenuViewContent(cssUri: vscode.Uri, svgObject: any, canvases: any): 
       </head>
       <script>
         const vscode = acquireVsCodeApi();
-        function handleButtonClick(command) {
-          vscode.postMessage({ command });
+        function handleButtonClick(command, data = {}) {
+          vscode.postMessage({ command, ...data });
         }
       </script>
       <body>
@@ -57,4 +62,3 @@ function getMenuViewContent(cssUri: vscode.Uri, svgObject: any, canvases: any): 
 }
 
 export { getMenuViewContent };
-
