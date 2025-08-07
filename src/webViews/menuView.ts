@@ -1,4 +1,4 @@
-import { Button } from "../App/toolBar";
+import {  Button } from "../App/toolBar";
 import * as vscode from "vscode";
 
 function getMenuViewContent(
@@ -13,9 +13,8 @@ function getMenuViewContent(
          onclick="handleButtonClick('openCanvas', { canvasId: '${canvas.id}' })">
          <!-- Canvas content can be rendered here using canvas data -->
     </div>
-  `,
-    )
-    .join("");
+  `).join("");
+
 
   return `<!DOCTYPE html>
     <html lang="en">
@@ -62,3 +61,4 @@ function getMenuViewContent(
 }
 
 export { getMenuViewContent };
+
