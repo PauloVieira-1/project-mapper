@@ -26,7 +26,7 @@
 #button-menu {
   background-color: #4e4e4e;
   height: 7vh;
-  width: 14.5%;
+  width: 16%;
   position: absolute;
   top: 0;
   right: 0;
@@ -161,6 +161,11 @@
   cursor: grab;
   z-index: 2;
   border-radius: 5px;
+}
+
+.shape:hover {
+box-shadow: rgba(0, 0, 0, 0.18) 0px 14px 28px, rgba(0, 0, 0, 0.16) 0px 10px 10px;
+transition: box-shadow 0.5s ease;
 }
 
 .triangle {

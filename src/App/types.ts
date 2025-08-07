@@ -58,6 +58,7 @@ interface ShapeData {
   nextColor: ColorType;
   coordinates: { x: number; y: number };
   dimensions: { length: number; width: number };
+  
 }
 
 interface canvasType {
