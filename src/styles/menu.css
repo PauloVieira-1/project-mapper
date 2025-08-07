@@ -44,7 +44,19 @@
   
 }
 
-.canvas-item:hover {
+/* .canvas-item:hover {
+  border: white 1px solid;
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+} */
+
+.box-outline {
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.box-outline:hover {
   border: white 1px solid;
   cursor: pointer;
   transform: scale(1.05);

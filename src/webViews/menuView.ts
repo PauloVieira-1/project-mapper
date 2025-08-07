@@ -9,13 +9,13 @@ function getMenuViewContent(
   const canvasContent = canvases
     .map(
       (canvas: canvasType) => `
-      <div>
-    <div id="canvas-${canvas.id}" class="mx-4 rounded-lg p-5 relative canvas-item"
+      <div class="box-outline">
+    <div id="canvas-${canvas.id}" class="rounded-lg p-5 relative canvas-item"
          onclick="handleButtonClick('openCanvas', { canvasId: '${canvas.id}' })">
          <!-- Canvas content can be rendered here using canvas data -->
     </div>
-<p class="ml-5 pl-2 mt-3 text-stone-100">DATE test test test</p>
-<p class="ml-5 pl-2 text-stone-800 font-size-md font-semibold mt-1">NAME test test test</p>
+<p class="pl-2 mt-3 text-stone-100">DATE test test test</p>
+<p class="pl-2 text-stone-800 font-size-md font-semibold mt-1">NAME test test test</p>
     </div>
   `).join("");
 
@@ -47,7 +47,7 @@ function getMenuViewContent(
         <div class="grid grid-cols-1 items-center">
           <div class="flex justify-between items-center my-5">    
               <button
-                class="button-add mx-1 rounded-full flex items-center justify-center"
+                class="button-add mx-1 rounded-full flex items-center justify-center mb-2"
               >
                 <img
                   src="${svgObject.plus}"
@@ -57,7 +57,7 @@ function getMenuViewContent(
                 />
               </button>
             </div>
-              <div class="grid grid-cols-3 gap-4 my-5">
+              <div class="grid grid-cols-3 gap-6 my-5 pl-5 pr-5">
                 ${canvasContent}
               </div>
               </div>
