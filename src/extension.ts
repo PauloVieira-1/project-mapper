@@ -5,6 +5,7 @@ import { menuCommandHandler } from "./App/Handlers/menuCommandHandler";
 import MenuHandler from "./App/Menu/MenuHandler";
 import { resourceUri, webViewUri, createSvgObject } from "./App/webviewUtils";
 import { canvasType } from "./App/types";
+import FileListProvider  from "./App/fileListProvider";
 
 export function activate(context: vscode.ExtensionContext) {
   // =====================================
@@ -82,6 +83,13 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(launchMenu);
+
+  // =====================================
+  // ========== EXPLORER VIEW =====================
+  // =====================================
+
+  const fileListProvider = FileListProvider.getInstance(context);
+  vscode.window.registerTreeDataProvider("View1", fileListProvider);
 }
 
 /**

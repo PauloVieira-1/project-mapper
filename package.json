@@ -56,7 +56,8 @@
       "project-mapper": [
         {
           "id": "View1",
-          "name": "Project View"
+          "name": "Project View",
+          "icon": "src/icons/icon.png"
         }
       ]
     }
