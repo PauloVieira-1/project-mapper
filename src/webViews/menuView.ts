@@ -47,7 +47,7 @@ function getMenuViewContent(
           vscode.postMessage({ command, ...data });
         }
 
-      </script>
+      </script> 
       <body>
       <div class="grid-background h-screen mx-4 rounded-lg p-5 relative">
         <div class="grid grid-cols-1 items-center">
@@ -63,7 +63,7 @@ function getMenuViewContent(
                 />
               </button>
             </div>
-              <div class="grid grid-cols-3 gap-6 my-5 pl-5 pr-5">
+              <div class="grid grid-cols-3 gap-6 my-5 pl-5 pr-5 overflow-container">
                 ${canvasContent}
               </div>
               </div>

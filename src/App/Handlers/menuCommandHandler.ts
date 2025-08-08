@@ -1,4 +1,4 @@
-import { canvasType, MenuCommandType } from "../types";
+import { canvasType, MenuCommandType, svgResources } from "../types";
 import { Application } from "../application";
 import * as vscode from "vscode";
 import { getNextEnumValue, isShapeMessage } from "../helpers";
@@ -46,15 +46,17 @@ export function menuCommandHandler(
       );
 
       const cssUri = webViewUri(panel, "src/styles/global.css", context);
-      const svgObject = createSvgObject(panel, context);
+      const svgObjectsList = createSvgObject(panel, context);
+      console.log(svgObjectsList);
       // Create or reuse Application instance for this canvas
       
-      if (!appInstances[canvasId]) {
-        appInstances[canvasId] = new Application();
+      let app = appInstances[canvasId];
+      if (!app) {
+        app = new Application();
+        appInstances[canvasId] = app;
       }
-      
-      appInstances[canvasId].setSvgObject(canvasData);
-      const app = appInstances[canvasId];
+
+      app.setSvgObject(svgObjectsList);
 
       // Setup shapes for this canvas
       app.setUpCanvas(

@@ -43,7 +43,6 @@ class Application {
       arrow: "arrow",
       trash: "trash",
     };
-    this.setUpButtons();
   }
 
   setUpButtons() {
@@ -122,6 +121,7 @@ class Application {
 
   setSvgObject(svgObject: objectAlias) {
     this.svgObject = svgObject;
+    this.setUpButtons();
   }
 
   createShape(
@@ -303,35 +303,41 @@ class Snapshot {
 }
 
 class Caretaker {
-  private snapshots: Snapshot[] = [];
+  private undoStack: Snapshot[] = [];
+  private redoStack: Snapshot[] = [];
 
   add(snapshot: Snapshot) {
-    this.snapshots.push(snapshot);
+    this.undoStack.push(snapshot);
+    this.redoStack = []; 
   }
 
   undo(canvas: Canvas) {
-    if (this.snapshots.length > 1) {
-      const snapshot = this.snapshots[this.snapshots.length - 2];
+    if (this.undoStack.length > 1) {
+      const snapshot = this.undoStack.pop(); 
       if (snapshot) {
-        snapshot.restore(canvas);
-        this.snapshots.pop();
+        this.redoStack.push(snapshot); 
+        const previous = this.undoStack[this.undoStack.length - 1];
+        if (previous) {
+          previous.restore(canvas);
+        }
       }
     }
   }
 
   redo(canvas: Canvas) {
-    if (this.snapshots.length > 0) {
-      const snapshot = this.snapshots.pop();
+    if (this.redoStack.length > 0) {
+      const snapshot = this.redoStack.pop();
       if (snapshot) {
+        this.undoStack.push(snapshot);
         snapshot.restore(canvas);
-        this.snapshots.push(snapshot);
       }
     }
   }
 
   getSnapshots() {
-    return [...this.snapshots];
+    return [...this.undoStack];
   }
 }
+
 
 export { Application };
