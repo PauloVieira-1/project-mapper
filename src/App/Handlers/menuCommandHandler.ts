@@ -5,14 +5,13 @@ import { getNextEnumValue, isShapeMessage } from "../helpers";
 import { ShapeData, ShapeType } from "../types";
 import { handleShapeCommand } from "./shapeCommandHandler";
 import { resourceUri, webViewUri, createSvgObject } from "../webviewUtils";
-import { filter } from "lodash";
 
 export function menuCommandHandler(
   command: MenuCommandType,
   message: any,
   context: vscode.ExtensionContext,
   canvases: any[],
-  appInstances: { [key: string]: Application },
+  appInstances: Record<string, Application>,
   updateCanvases: (canvases: any[]) => void,
 ) {
   switch (command) {
@@ -48,11 +47,13 @@ export function menuCommandHandler(
 
       const cssUri = webViewUri(panel, "src/styles/global.css", context);
       const svgObject = createSvgObject(panel, context);
-
       // Create or reuse Application instance for this canvas
+      
       if (!appInstances[canvasId]) {
-        appInstances[canvasId] = new Application(svgObject);
+        appInstances[canvasId] = new Application();
       }
+      
+      appInstances[canvasId].setSvgObject(canvasData);
       const app = appInstances[canvasId];
 
       // Setup shapes for this canvas
@@ -134,7 +135,7 @@ export function menuCommandHandler(
         name: "New Canvas",
         dateCreated: new Date().toLocaleString().replace(",", ""),
       };
-      const newCanvasList = [...canvases, newCanvas]; // don't mutate original
+      const newCanvasList = [...canvases, newCanvas]; 
       updateCanvases(newCanvasList);
       break;
 
@@ -153,8 +154,8 @@ export function menuCommandHandler(
     case MenuCommandType.clearAll:
       {
         // Handle clearing all canvases
-        const newcanvases = [];
-        updateCanvases(canvases);
+        const newcanvases: canvasType[] = [];
+        updateCanvases(newcanvases);
       }
       break;
     default:

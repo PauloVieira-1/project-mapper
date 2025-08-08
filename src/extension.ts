@@ -6,8 +6,10 @@ import MenuHandler from "./App/Menu/MenuHandler";
 import { resourceUri, webViewUri, createSvgObject } from "./App/webviewUtils";
 import { canvasType } from "./App/types";
 import FileListProvider  from "./App/fileListProvider";
+import { ShapeData } from "./App/types";
 
 export function activate(context: vscode.ExtensionContext) {
+  
   // =====================================
   // ========== MENU WEBVIEW =============
   // =====================================
@@ -85,7 +87,19 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(launchMenu);
 
   // =====================================
-  // ========== EXPLORER VIEW =====================
+  // ========== OPEN SPECIFIC WEBVIEW ====
+  // =====================================
+
+  vscode.commands.registerCommand("projectmapper.openCanvas", (data) => {
+    const canvases: canvasType[] = context.workspaceState.get("canvases") || [];
+    const canvasId = canvases.find((c) => c.id === data.canvasId)?.id || "";
+    const canvasShapes = context.workspaceState.get<ShapeData[]>(
+      `shapes_${canvasId}`,
+    );
+  });
+
+  // =====================================
+  // ========== EXPLORER VIEW ============
   // =====================================
 
   const fileListProvider = FileListProvider.getInstance(context);

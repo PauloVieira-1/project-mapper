@@ -23,7 +23,7 @@ interface ExtendedWebViewContentOptions extends WebViewContentOptions {
 }
 
 class Application {
-  private svgObject: objectAlias;
+  declare private svgObject: objectAlias;
   declare private squareButton: Button;
   declare private circleButton: Button;
   declare private triangleButton: Button;
@@ -35,12 +35,14 @@ class Application {
   public canvas = new Canvas();
   public caretaker = new Caretaker();
 
-  constructor(resources: objectAlias) {
-    this.svgObject = resources;
-    this.initialize();
-  }
-
-  initialize() {
+  constructor() {
+    this.svgObject = {
+      square: "square",
+      circle: "circle",
+      triangle: "triangle",
+      arrow: "arrow",
+      trash: "trash",
+    };
     this.setUpButtons();
   }
 
@@ -116,6 +118,10 @@ class Application {
 
   setUpCanvas(objectArray: Shape[]) {
     this.canvas.setShapes(objectArray);
+  }
+
+  setSvgObject(svgObject: objectAlias) {
+    this.svgObject = svgObject;
   }
 
   createShape(

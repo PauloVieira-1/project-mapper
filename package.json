@@ -22,7 +22,8 @@
       },
       {
         "command": "projectmapper.open",
-        "title": "Open Project-Mapper "
+        "title": "Open Project-Mapper ",
+        "when": "view == project-mapper"
       }
     ],
     "languages": [

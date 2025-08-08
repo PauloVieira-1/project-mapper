@@ -1,10 +1,11 @@
 import * as vscode from "vscode";
 import { canvasType } from "../App/types";
+import { Application } from "./application";
+import { menuCommandHandler } from "./Handlers/menuCommandHandler";
 
 class FileListProvider implements vscode.TreeDataProvider<string> {
     private context: vscode.ExtensionContext;
     private static instance: FileListProvider | null = null;
-    private canvases: canvasType[] = [];
 
     private constructor(context: vscode.ExtensionContext) {
         this.context = context;
@@ -18,13 +19,14 @@ class FileListProvider implements vscode.TreeDataProvider<string> {
         return this.instance;
     }
 
+
     private getCanvases(): canvasType[] {
         let canvases: canvasType[] = this.context.workspaceState.get("canvases") || [];
         return canvases;
     }
 
     getFiles(): string[] {
-        return [];
+        return this.getCanvases().map((canvas) => canvas.name);
     }
 
     getTreeItem(element: string): vscode.TreeItem  {
@@ -39,6 +41,10 @@ class FileListProvider implements vscode.TreeDataProvider<string> {
 
     getChildren(element?: string): Thenable<string[]> {
         return Promise.resolve(this.getFiles());
+    }
+
+    openfile(element: string): void {
+        
     }
 }
 
